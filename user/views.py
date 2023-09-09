@@ -124,8 +124,8 @@ def login_view(request):
             return redirect('/home')
         else:
             context = {'error':'Invalid username or password.'}
-            return render(request, '/login.html', context)
-    return render(request, '/login.html', {'error':''})
+            return render(request, 'user/login.html', context)
+    return render(request, 'user/login.html', {'error':''})
 
 def profile(request):
     auth = userAuth(request)
@@ -145,3 +145,4 @@ def payments(request):
     if auth:
         return auth
     return
+

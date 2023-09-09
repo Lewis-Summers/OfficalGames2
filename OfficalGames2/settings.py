@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'OfficalGames2.wsgi.application'
     'ENGINE': 'django.db.backends.postgresql',
     'NAME': 'Offical Games',
     'USER': 'Lewis-Summers',
-    'PASSWORD': 'N9GzZ2VdtXFu',
+    'PASSWORD': '',
     'HOST': 'ep-withered-mud-67252824.us-east-1.aws.neon.tech',
     'PORT': '5432',
   }

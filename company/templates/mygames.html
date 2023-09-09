@@ -1,0 +1,31 @@
+{% extends 'companybase.html' %}
+{% block title %}my games{% endblock title %}
+{% block style %}{% endblock style %}
+{% block main %}
+    <div>
+        <table class="">
+            <thead>
+                 <tr>
+                     <th>Game ID</th>
+                     <th>League</th>
+                     <th>Complex and Feild</th>
+                     <th>Date Time</th>
+                     <th>Officals Assigned</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for game in games %}
+                    <tr>
+                        <td>{{game.gameid}}</td>
+                        <td>{{game.league}}</td>
+                        <td>{{game.complex}} - {{game.feild}}</td>
+                        <td>{{game.date_time}}</td>
+                        <td>{% for ref in Assignment.%}</td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock main %}
+{% block scripts %}{% endblock scripts %}

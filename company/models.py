@@ -44,19 +44,10 @@ class Notification(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
-class Assignment(models.Model):
-    CHOICES = (
-        ('A', 'Accepted'),
-        ('D', 'Declined'),
-        ('P', 'Pending'),
-    )
-    role = models.ForeignKey(Role, on_delete=models.PROTECT)
-    status = models.CharField(max_length=2, choices=CHOICES, default='P')
-    paid = models.BooleanField(default=False)
 
 # Step 3: Tables with foreign key references to tables created in Steps 1 and 2
 class Game(models.Model):
-    assigned_game = models.IntegerField()
+    assigned_game_id = models.IntegerField()
     sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
     field = models.ForeignKey(Field, on_delete=models.CASCADE, null=True)
     league = models.ForeignKey(Leagues, on_delete=models.CASCADE, null=True)
@@ -65,7 +56,6 @@ class Game(models.Model):
     home_score = models.IntegerField(null=True)
     away_score = models.IntegerField(null=True)
     date_time = models.DateTimeField(null=True)
-    assignments = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     admin_notes = models.TextField(null=True)
     game_report = models.TextField(null=True)
     needs_admin = models.BooleanField(null=True)
@@ -78,6 +68,14 @@ class Game(models.Model):
     age = models.ForeignKey(Age, on_delete=models.CASCADE)'''
 
 
-class AssignmentUser(models.Model):
+class Assignment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    CHOICES = (
+        ('A', 'Accepted'),
+        ('D', 'Declined'),
+        ('P', 'Pending'),
+    )
+    role = models.ForeignKey(Role, on_delete=models.PROTECT)
+    status = models.CharField(max_length=2, choices=CHOICES, default='P')
+    paid = models.BooleanField(default=False)
