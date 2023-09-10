@@ -4,7 +4,7 @@ from django.template import loader
 
 
 def home(request):
-    return render(request, "test.html")
+    return render(request, "company/companybase.html")
 
 def officials(request):
     # this should return a list of all the officals 
