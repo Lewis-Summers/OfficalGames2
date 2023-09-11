@@ -47,7 +47,7 @@ class Notification(models.Model):
 
 # Step 3: Tables with foreign key references to tables created in Steps 1 and 2
 class Game(models.Model):
-    assigned_game_id = models.IntegerField()
+    assigned_game_id = models.IntegerField(blank=True)
     sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
     field = models.ForeignKey(Field, on_delete=models.CASCADE, null=True)
     league = models.ForeignKey(Leagues, on_delete=models.CASCADE, null=True)

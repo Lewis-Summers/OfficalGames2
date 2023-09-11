@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
-
+from company.models import *
+from user.views import userAuth
 
 def home(request):
     return render(request, "company/companybase.html")
@@ -43,7 +44,26 @@ def userdash(request):
     return
 
 def mygames(request):
-    # returns information about my games by date ig
+    if not userAuth(request):
+        return HttpResponse("your not signed in")
+
+    user_assignments = Assignment.objects.select_related('game__sport', 'game__field', 'game__league', 'game__home_team', 'game__away_team').filter(user=user)
+    user_assignments = user_assignments.prefetch_related('game__assignment_set__user').filter(user=user)
+    for assignment in user_assignments:
+        game = assignment.game
+        sport = game.sport
+        field = game.field
+        league = game.league
+        home_team = game.home_team
+        away_team = game.away_team
+        # Access other game details as needed
+
+        # Access referees assigned to the same game efficiently
+        referees = assignment.game.assignment_set.all()
+        for referee in referees:
+            pass
+            # Access referee details
+
     return
 
 def selfassign(request):
