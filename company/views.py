@@ -46,7 +46,7 @@ def userdash(request):
 def mygames(request):
     if not userAuth(request):
         return HttpResponse("your not signed in")
-
+    games = []
     user_assignments = Assignment.objects.select_related('game__sport', 'game__field', 'game__league', 'game__home_team', 'game__away_team').filter(user=user)
     user_assignments = user_assignments.prefetch_related('game__assignment_set__user').filter(user=user)
     for assignment in user_assignments:
@@ -60,10 +60,11 @@ def mygames(request):
 
         # Access referees assigned to the same game efficiently
         referees = assignment.game.assignment_set.all()
-        for referee in referees:
-            pass
-            # Access referee details
 
+        # for referee in referees:
+        #     refassignment = user_assignments.prefetch_related('game__assignment_set__user').filter(user=referee)
+        #     for assignment in refassignment:
+        #         assignment.role
     return
 
 def selfassign(request):
