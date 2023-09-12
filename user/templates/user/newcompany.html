@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>login</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div id="newCompanyForm">
+            <form method="post">
+              {% csrf_token %}     
+              <p>Completing this action will make you the Lead Company Admin. Your admin status can not be revoked by anyone besides site admininstration. You can add people to your company via (links or something). You can promote user to staff status in your company but your company staff will not be able to add or revoke your admin status.</p> 
+              <br>
+              <label for="companyname">What is your Company's Name?</label>
+              <input type="text" id="companyname" name="companyname" required />
+              <br>
+              <br>
+              <p>{{error}}</p>
+              <br>
+              <p>Before you can add users to your company you will have to add a form of payment. You will be charged $3000 and then you can add users to your company. There is only one way to pay, you will be charged x dollars today and then x amount of someone else. This still needs to be figured out.</p>
+              <button type="submit">Register Company</button>
+            </form>
+          </div>
+    </body>
+</html>

@@ -4,6 +4,9 @@ from django.db import IntegrityError
 from django.contrib import messages
 import re
 from django.contrib.auth.models import User
+from company.models import Company
+from django.core.exceptions import ObjectDoesNotExist
+
 
 
 
@@ -116,7 +119,6 @@ def register(request):
         
     return render(request, 'user/register.html')
 
-
 def login_view(request):
     if request.method == 'POST':
         user = authenticate(request, email=request.POST['email'], password=request.POST['password'])
@@ -153,8 +155,18 @@ def createcompany(request):
     if auth:
         return auth
     if request.method == 'POST':
-        pass
-        # needs to create a thing to create a company
-    return
+        name = request.POST['companyname']
+        try:
+            Company.objects.get(name=name)
+            context = {'error':'Company Name is already used.'}
+            return render(request, 'user/newcompany.html', context)
+        except ObjectDoesNotExist:
+            Company.objects.create(
+                name=name,
+                leadAdmin=request.user # idk if this will work
+            )
+    
+    return render(request, 'user/newcompany.html', {'error':''})
+
 
     
