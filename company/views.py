@@ -48,7 +48,7 @@ def mygames(request):
         return HttpResponse("your not signed in")
     games = []
     user_assignments = Assignment.objects.select_related('game__sport', 'game__field', 'game__league', 'game__home_team', 'game__away_team').filter(user=user)
-    user_assignments = user_assignments.prefetch_related('game__assignment_set__user').filter(user=user)
+    user_assignments = user_assignments.prefetch_related('game__assignment_set__user').filter(user=request.user)
     for assignment in user_assignments:
         game = assignment.game
         sport = game.sport

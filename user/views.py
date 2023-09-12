@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model, authenticate, login
 from django.db import IntegrityError
 from django.contrib import messages
 import re
+from django.contrib.auth.models import User
+
 
 
 def validate(data):
@@ -95,10 +97,9 @@ def register(request):
            #messages.warning(request, f'There were the following errors: {", \n".join(errors)}')  
         else:
             try:
+                User = get_user_model()
                 if User.objects.filter(email=email).exists():
                     messages.warning(request, 'This email already exists, do you mean to <a href="google.com">log in</a>')
-
-                User = get_user_model()
 
                 user = User.objects.create_user(
                     username=f"{fname}_{lname}",
@@ -113,7 +114,7 @@ def register(request):
             except IntegrityError as e:
                 messages.warning(request, f"Integrity Error: {e}")
         
-    return render(request, 'register.hmtl')
+    return render(request, 'user/register.html')
 
 
 def login_view(request):
@@ -146,3 +147,14 @@ def payments(request):
         return auth
     return
 
+def createcompany(request):
+    auth = userAuth(request)
+    # needs MFA
+    if auth:
+        return auth
+    if request.method == 'POST':
+        pass
+        # needs to create a thing to create a company
+    return
+
+    

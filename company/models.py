@@ -4,7 +4,7 @@ from user.models import User
 # Step 1: Tables without foreign key references
     
 class Company(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     leadAdmin = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Role(models.Model):
