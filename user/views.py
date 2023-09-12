@@ -165,8 +165,14 @@ def createcompany(request):
                 name=name,
                 leadAdmin=request.user # idk if this will work
             )
+            # return redirect(Company)
     
     return render(request, 'user/newcompany.html', {'error':''})
 
-
+def joinGroup(request):
+    auth = userAuth(request)
+    if auth:
+        return auth
+    companies = Company.objects.all()
+    return render(request, 'user/companies.html', {'companies': companies})
     

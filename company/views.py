@@ -4,38 +4,38 @@ from django.template import loader
 from company.models import *
 from user.views import userAuth
 
-def home(request):
+def home(request, companyid):
     return render(request, "company/companybase.html")
 
-def officials(request):
+def officials(request, companyid):
     # this should return a list of all the officals 
     return HttpResponse('hi')
 
-def official(request, id):
+def official(request, companyid, id):
     # this returns a single officals profile
     return
 
-def leagues(request):
+def leagues(request, companyid):
     # returns a list of leagues
     return
 
-def league(request, id):
+def league(request, companyid, id):
     # returns information about a league
     return
 
-def complexs(request, complexid):
+def complexs(request, companyid):
     # returns a list of complexs
-    return
+    return HttpResponse(companyid)
 
-def complex(request, complexid):
+def complex(request, companyid, complexid):
     # returns information about a complex including all the feilds
     return
 
-def feild(request, complexid, feildid):
+def feild(request, companyid, complexid, feildid):
     # returns information about a feild in a complex
     return
 
-def game(request, gameid):
+def game(request, companyid, gameid):
     # returns information about a specific game
     return
 

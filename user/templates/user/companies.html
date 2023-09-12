@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div>
+            <h1>All Companies</h1>
+            <table class="">
+                <thead>
+                     <tr>
+                         <th>Company Name</th>
+                         <th>Admin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                        <tr>
+                            <td>{{company.name}}</td>
+                            <td>{{company.leadAdmin.username}}</td>
+                        </tr> 
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h1>Your Companies</h1>
+            <table class="">
+                <thead>
+                     <tr>
+                         <th>Company Name</th>
+                         <th>Admin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in usercompanies %}
+                        <tr>
+                            <td>{{company.name}}</td>
+                            <td>{{company.leadAdmin.username}}</td>
+                        </tr> 
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h1>Join a new company</h1>
+            
+        </div>
+    </body>
+</html>

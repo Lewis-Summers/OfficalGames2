@@ -5,14 +5,14 @@ urlpatterns = [
     path('', views.home, name='dashboard'),
     
     #info
-    path('info/officials',  views.officials, name='officials'),
-    path('info/officials/official/<int:id>',  views.official, name='offical'),
-    path('info/leagues',  views.leagues, name='leagues'),
-    path('info/leagues/league/<int:id>',  views.league, name='league'),
-    path('info/complexs', views.complexs, name='complex'),
-    path('info/complexs/complex/<int:complexid>', views.complex, name='complex'),
-    path('info/complexs/complex/<int:complexid>/feild/<int:feildid>', views.feild, name='feild'),
-    path('info/game/<int:gameid>', views.game, name="game"), # this is right we wont have a all games page we just have a game look up type thing here
+    path('<int:companyid>/info/officials',  views.officials, name='officials'),
+    path('<int:companyid>/info/officials/official/<int:id>',  views.official, name='offical'),
+    path('<int:companyid>/info/leagues',  views.leagues, name='leagues'),
+    path('<int:companyid>/info/leagues/league/<int:id>',  views.league, name='league'),
+    path('<int:companyid>/info/complexs', views.complexs, name='complex'),
+    path('<int:companyid>/info/complexs/complex/<int:complexid>', views.complex, name='complex'),
+    path('<int:companyid>/info/complexs/complex/<int:complexid>/feild/<int:feildid>', views.feild, name='feild'),
+    path('<int:companyid>/info/game/<int:gameid>', views.game, name="game"), # this is right we wont have a all games page we just have a game look up type thing here
 
     # user dash
     path('userdash/', views.userdash),

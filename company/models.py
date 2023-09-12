@@ -6,13 +6,18 @@ genderChoices = (
         ('M', 'Male'),
         ('F', 'Female'),
         ('C', 'Coed'),
-    )
+)
+
 
 # Step 1: Tables without foreign key references
 class Company(models.Model):
     name = models.CharField(max_length=255, unique=True)
     leadAdmin = models.ForeignKey(User, on_delete=models.CASCADE)
-    paymentHistory = models.JSONField()
+    accessCode = models.CharField(max_length=5, null=True)
+    # paymentHistory = models.JSONField()
+
+    def __str__(self):
+        return self.name
 
 class Role(models.Model):
     name = models.CharField(max_length=255)
@@ -72,9 +77,8 @@ class Game(models.Model):
     assigned_game_id = models.IntegerField(blank=True)
     sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
     age = models.ForeignKey(Age, on_delete=models.CASCADE, null=True)
-    gender = models.CharField(max_length=2, choices=genderChoices, on_delete=models.CASCADE)
+    gender = models.CharField(max_length=2, choices=genderChoices, blank=True)
     field = models.ForeignKey(Field, on_delete=models.CASCADE, null=True)
-    gender = models.CharField(max_length=2, on_delete=models.CASCADE)
     league = models.ForeignKey(Leagues, on_delete=models.CASCADE, null=True)
     home_team = models.ForeignKey(Teams, on_delete=models.CASCADE, related_name='home_games', null=True)
     away_team = models.ForeignKey(Teams, on_delete=models.CASCADE, related_name='away_games', null=True)
@@ -91,7 +95,7 @@ class PayScale(models.Model):
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     age = models.ForeignKey(Age, on_delete=models.CASCADE)
     numRef = models.IntegerField()
-    gender = models.CharField(max_length=2, choices=genderChoices, on_delete=models.CASCADE)
+    gender = models.CharField(max_length=2, choices=genderChoices)
 
 
 class Assignment(models.Model):
@@ -105,3 +109,9 @@ class Assignment(models.Model):
     role = models.ForeignKey(Role, on_delete=models.PROTECT)
     status = models.CharField(max_length=2, choices=CHOICES, default='P')
     paid = models.BooleanField(default=False)
+
+
+class CompanyMembership(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    isAdmin = models.BooleanField(default=False, null=True, blank=True)
