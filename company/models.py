@@ -1,11 +1,18 @@
 from django.db import models
 from user.models import User
 
+
+genderChoices = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('C', 'Coed'),
+    )
+
 # Step 1: Tables without foreign key references
-    
 class Company(models.Model):
     name = models.CharField(max_length=255, unique=True)
     leadAdmin = models.ForeignKey(User, on_delete=models.CASCADE)
+    paymentHistory = models.JSONField()
 
 class Role(models.Model):
     name = models.CharField(max_length=255)
@@ -28,6 +35,21 @@ class Leagues(models.Model):
     name = models.CharField(max_length=255)
     rule_set = models.TextField()
     sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
+    def payValue(self, assignment):
+        game = assignment.game
+        age = game.age  # Assuming age information is associated with the home team
+        gender = game.gender  # Assuming gender information is associated with the home team
+        # Find the relevant PayScale based on sport, age, and gender
+        try:
+            pay_scale = PayScale.objects.get(
+                league=self,
+                role=assignment.role,
+                age=age,
+                gender=gender
+            )
+            return pay_scale
+        except PayScale.DoesNotExist:
+            return None
 
 class Teams(models.Model):
     team_name = models.CharField(max_length=255)
@@ -49,7 +71,10 @@ class Notification(models.Model):
 class Game(models.Model):
     assigned_game_id = models.IntegerField(blank=True)
     sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
+    age = models.ForeignKey(Age, on_delete=models.CASCADE, null=True)
+    gender = models.CharField(max_length=2, choices=genderChoices, on_delete=models.CASCADE)
     field = models.ForeignKey(Field, on_delete=models.CASCADE, null=True)
+    gender = models.CharField(max_length=2, on_delete=models.CASCADE)
     league = models.ForeignKey(Leagues, on_delete=models.CASCADE, null=True)
     home_team = models.ForeignKey(Teams, on_delete=models.CASCADE, related_name='home_games', null=True)
     away_team = models.ForeignKey(Teams, on_delete=models.CASCADE, related_name='away_games', null=True)
@@ -61,11 +86,12 @@ class Game(models.Model):
     needs_admin = models.BooleanField(null=True)
 
 
-'''class Scale(models.Model):
-    title = models.CharField(max_length=255)
+class PayScale(models.Model):
     league = models.ForeignKey(Leagues, on_delete=models.CASCADE)
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
-    age = models.ForeignKey(Age, on_delete=models.CASCADE)'''
+    age = models.ForeignKey(Age, on_delete=models.CASCADE)
+    numRef = models.IntegerField()
+    gender = models.CharField(max_length=2, choices=genderChoices, on_delete=models.CASCADE)
 
 
 class Assignment(models.Model):
