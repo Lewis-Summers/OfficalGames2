@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'company/companybase.css' %}">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <title>{% block title %}Official Games{% endblock title %}</title>
+</head>
+<body>
+    <div class="sidebar close">
+        <div class="logo-details">
+          <i class='bx bxl-c-plus-plus'></i>
+          <span class="logo_name">Official Games</span>
+        </div>
+        <ul class="nav-links">
+          <li>
+            <div class="iocn-link">
+              <a href="#">
+                <i class='bx bx-grid-alt' ></i>
+                <span class="link_name">Dashboard</span>
+              </a>
+              <i class='bx bxs-chevron-down arrow' ></i>
+            </div>
+            <ul class="sub-menu">
+              <li><a class="link_name" href="#">Dashboard</a></li>
+              <li><a href="#">Self Assign</a></li>
+              <li><a href="#">My Games</a></li>
+              <li><a href="#">After Games</a></li>
+              <li><a href="#">My Availability</a></li>
+            </ul>
+          </li>
+          
+          <li>
+            <div class="iocn-link">
+              <a href="#">
+                <i class='bx bx-book-alt' ></i>
+                <span class="link_name">Company</span>
+              </a>
+              <i class='bx bxs-chevron-down arrow' ></i>
+            </div>
+            <ul class="sub-menu">
+              <li><a class="link_name" href="#">Company Info</a></li>
+              <li><a href="#">Announcements</a></li>
+              <li><a href="#">Complexs</a></li>
+              <li><a href="#">Leagues</a></li>
+              <li><a href="#">Game Pay</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </li>
+          
+           {% if employment.isadmin %}
+            {% include 'company\includes\admindropdown.html' %}
+          {% endif %}
+
+          <div class="profile-details">
+            <div class="profile-content">
+              <img src="profile.png" alt="profileImg">
+            </div>
+            <div class="name-job">
+              <div class="profile_name">{{employment.user.username}}</div>
+              <div class="job">{% if employment.isadmin %}Admin{% else %}Referee{% endif %}</div>
+            </div>
+            <a id="logout-icon" style="color: inherit;" href='/profile/logout'><i class='bx bx-log-out' ></i></a>
+          </div>
+
+        </ul>
+      </div>
+      <section class="home-section">
+        <div class="home-content">
+          <i class='bx bx-menu' ></i>
+          <span class="text">{{employment.company.name}}</span>
+        </div>
+        <div class="main-content">
+
+        </div>
+      </section>
+      <script>
+      let arrow = document.querySelectorAll(".arrow");
+      for (var i = 0; i < arrow.length; i++) {
+        arrow[i].addEventListener("click", (e)=>{
+       let arrowParent = e.target.parentElement.parentElement;//selecting main parent of arrow
+       arrowParent.classList.toggle("showMenu");
+        });
+      }
+      let sidebar = document.querySelector(".sidebar");
+      let sidebarBtn = document.querySelector(".bx-menu");
+      console.log(sidebarBtn);
+      sidebarBtn.addEventListener("click", ()=>{
+        sidebar.classList.toggle("close");
+      });
+      </script>
+    
+</body>
+</html>

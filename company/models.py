@@ -109,6 +109,7 @@ class Assignment(models.Model):
     role = models.ForeignKey(Role, on_delete=models.PROTECT)
     status = models.CharField(max_length=2, choices=CHOICES, default='P')
     paid = models.BooleanField(default=False)
+    payApproved = models.BooleanField(default=False)
 
 
 class CompanyMembership(models.Model):
