@@ -77,7 +77,7 @@ def userAuth(request):
     
 def register(request):
     datapack = {}
-    if request.method == 'POST':
+    if request.method == 'POST': # gets all the info from the form
         fname = request.POST['fname']
         lname = request.POST['lname']
         email = request.POST['email']
@@ -86,30 +86,30 @@ def register(request):
         password1 = request.POST['password1']
         password2 = request.POST['password2']
 
-        userdata = {
+        userdata = { # puts it in a dict for the validate fucntion
             'fname': fname,
             'lname': lname,
             'email': email,
             'phone_number': phone_number,
             'match_password': [password1, password2]
         }
-        errors = validate(userdata)
-        datapack = {
+        errors = validate(userdata) # returns a list of errors
+        datapack = { # this is for making sure that the data in the forms stays the same if we reload the page
                 "fname": fname,
                 "lname": lname,
                 "email": email,
                 "phone_number": phone_number,
             }
-        if errors:
+        if errors: # if there are errors in the errors list
             for error in errors:
-                messages.warning(request, error)  
+                messages.warning(request, error)  # add them to messages this is weird but somehow they go into messages.html and that gets put into the register.html page
         else:
             try:
                 User = get_user_model()
-                if User.objects.filter(email=email).exists():
-                    messages.warning(request, mark_safe('Email is already in use. <a href="/profile/login">Log in</a> instead.'))
+                if User.objects.filter(email=email).exists(): # if the inputed email already ezists
+                    messages.warning(request, mark_safe('Email is already in use. <a href="/profile/login">Log in</a> instead.')) # sends pure html
                 
-                else:
+                else:#creates a user obj
                     user = User.objects.create_user(
                         username=f"{fname}_{lname}",
                         first_name=fname,
@@ -122,8 +122,7 @@ def register(request):
                     return redirect('/home') # needs to be changed to the user dash board
 
             except IntegrityError as e:
-                messages.warning(request, f"Integrity Error: {e}")
-    print(datapack)
+                messages.warning(request, f"Integrity Error: {e}") # this is like a real fuck up and somehow the database is not working right or we put weird data that fucked up the database in
     return render(request, 'user/register.html', {"datapack": datapack})
 
 
@@ -167,9 +166,9 @@ def createcompany(request):
         try:
             Company.objects.get(name=name)
             context = {'error':'Company Name is already used.'}
-            return render(request, 'user/newcompany.html', context)
-        except ObjectDoesNotExist:
-            Company.objects.create(
+            return render(request, 'user/newcompany.html', context) # this section checks if the company name already exists
+        except ObjectDoesNotExist:# if it does not exist
+            Company.objects.create( # it creates a new company
                 name=name,
                 leadAdmin=request.user
             )
@@ -184,15 +183,14 @@ def joinGroup(request):
     if request.method == 'POST':
         companyid = request.POST['companyid']
         try:
-            addedCompany = Company.objects.get(id=companyid)
+            addedCompany = Company.objects.get(id=companyid) #gets the company based on the id inputed
             try:
-                CompanyMembership.objects.get(company=addedCompany, user=request.user)
-                
+                CompanyMembership.objects.get(company=addedCompany, user=request.user) # checks for a CompanyMembership that already is the same
             except ObjectDoesNotExist:
-                CompanyMembership.objects.create(company=addedCompany, user=request.user)
+                CompanyMembership.objects.create(company=addedCompany, user=request.user) # creates the a CompanyMembership
         except ObjectDoesNotExist:
-            print("obj not exist")
-    companies = Company.objects.all()
-    usercompanies = CompanyMembership.objects.filter(user=request.user)
+            print("obj not exist") #needs to find a way to handle if thats not a valid company id
+    companies = Company.objects.all() # all companies
+    usercompanies = CompanyMembership.objects.filter(user=request.user) # all the companies the user is a part of
     return render(request, 'user/companies.html', {'companies': companies, 'usercompanies': usercompanies})
     
