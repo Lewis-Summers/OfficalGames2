@@ -41,7 +41,7 @@ def game(request, companyid, gameid):
 
 def userdash(request):
     # returns user dash and all the important inforamtion like notifactions, profile, settings, upcoming games, and maybe some upcoming game information
-    return
+    return HttpResponse(request, "userdash")
 
 def mygames(request):
     if not userAuth(request):

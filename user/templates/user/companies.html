@@ -8,7 +8,7 @@
     </head>
     <body>
         <div>
-            <h1>All Companies</h1>
+            <h1>All Companies(will be removed for normal users)</h1>
             <table class="">
                 <thead>
                      <tr>
@@ -30,19 +30,36 @@
                 <thead>
                      <tr>
                          <th>Company Name</th>
+                         <th>Your Role<th>
                          <th>Admin</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for company in usercompanies %}
                         <tr>
-                            <td>{{company.name}}</td>
-                            <td>{{company.leadAdmin.username}}</td>
+                            <td>{{company.company.name}}</td>
+                            <td>{{company.isAdmin}}</td>
+                            <td>{% if company.isAdmin %}Staff{% else %}User{% endif %}</td>
+                            <td>{{company.company.leadAdmin.username}}</td>
                         </tr> 
                     {% endfor %}
                 </tbody>
             </table>
             <h1>Join a new company</h1>
+            <div id="joinform">
+                <form method="post">
+                  {% csrf_token %}      
+                  <label for="id_email">Company Identifaction Number:</label>
+                  <input type="text" id="companyid" name="companyid" required />
+                  <br/>
+          
+                  <label for="joincode">Eventually will be a join code or something:</label>
+                  <input type="password" id="joincode" name="joincode" required />
+                  <br/>
+                  
+                  <button type="submit">Join</button>
+                </form>
+              </div>
             
         </div>
     </body>

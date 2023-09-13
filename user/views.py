@@ -4,11 +4,9 @@ from django.db import IntegrityError
 from django.contrib import messages
 import re
 from django.contrib.auth.models import User
-from company.models import Company
+from company.models import Company, CompanyMembership
 from django.core.exceptions import ObjectDoesNotExist
-
-
-
+from django.utils.safestring import mark_safe
 
 def validate(data):
     errorList = []
@@ -78,6 +76,7 @@ def userAuth(request):
         return render(request, "main/notSignedIn.html")
     
 def register(request):
+    datapack = {}
     if request.method == 'POST':
         fname = request.POST['fname']
         lname = request.POST['lname']
@@ -95,29 +94,38 @@ def register(request):
             'match_password': [password1, password2]
         }
         errors = validate(userdata)
+        datapack = {
+                "fname": fname,
+                "lname": lname,
+                "email": email,
+                "phone_number": phone_number,
+            }
         if errors:
-            pass
-           #messages.warning(request, f'There were the following errors: {", \n".join(errors)}')  
+            for error in errors:
+                messages.warning(request, error)  
         else:
             try:
                 User = get_user_model()
                 if User.objects.filter(email=email).exists():
-                    messages.warning(request, 'This email already exists, do you mean to <a href="google.com">log in</a>')
-
-                user = User.objects.create_user(
-                    username=f"{fname}_{lname}",
-                    first_name=fname,
-                    last_name=lname,
-                    email=email,
-                    password= password1,
-                    phone_number=phone_number,
-                )
-                user.save()
+                    messages.warning(request, mark_safe('Email is already in use. <a href="/profile/login">Log in</a> instead.'))
+                
+                else:
+                    user = User.objects.create_user(
+                        username=f"{fname}_{lname}",
+                        first_name=fname,
+                        last_name=lname,
+                        email=email,
+                        password= password1,
+                        phone_number=phone_number,
+                    )
+                    user.save()
+                    return redirect('company/userdash')
 
             except IntegrityError as e:
                 messages.warning(request, f"Integrity Error: {e}")
-        
-    return render(request, 'user/register.html')
+    print(datapack)
+    return render(request, 'user/register.html', {"datapack": datapack})
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -163,7 +171,7 @@ def createcompany(request):
         except ObjectDoesNotExist:
             Company.objects.create(
                 name=name,
-                leadAdmin=request.user # idk if this will work
+                leadAdmin=request.user
             )
             # return redirect(Company)
     
@@ -173,6 +181,18 @@ def joinGroup(request):
     auth = userAuth(request)
     if auth:
         return auth
+    if request.method == 'POST':
+        companyid = request.POST['companyid']
+        try:
+            addedCompany = Company.objects.get(id=companyid)
+            try:
+                CompanyMembership.objects.get(company=addedCompany, user=request.user)
+                
+            except ObjectDoesNotExist:
+                CompanyMembership.objects.create(company=addedCompany, user=request.user)
+        except ObjectDoesNotExist:
+            print("obj not exist")
     companies = Company.objects.all()
-    return render(request, 'user/companies.html', {'companies': companies})
+    usercompanies = CompanyMembership.objects.filter(user=request.user)
+    return render(request, 'user/companies.html', {'companies': companies, 'usercompanies': usercompanies})
     
