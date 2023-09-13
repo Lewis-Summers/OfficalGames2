@@ -119,7 +119,7 @@ def register(request):
                         phone_number=phone_number,
                     )
                     user.save()
-                    return redirect('company/userdash')
+                    return redirect('/home') # needs to be changed to the user dash board
 
             except IntegrityError as e:
                 messages.warning(request, f"Integrity Error: {e}")
