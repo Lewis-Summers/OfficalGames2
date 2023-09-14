@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'company/companybase.css' %}">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <title>{% block title %}Profile{% endblock title %}</title>
+</head>
+<body>
+    <div class="sidebar close">
+        <div class="logo-details">
+          <i class='bx bxl-c-plus-plus'></i>
+          <span class="logo_name">Official Games</span>
+        </div>
+        <ul class="nav-links">
+
+          <li>
+            <div class="iocn-link">
+              <a href="#">
+                <i class='bx bx-grid-alt' ></i>
+                <span class="link_name">Dashboard</span>
+              </a>
+              <i class='bx bxs-chevron-down arrow' ></i>
+            </div>
+            <ul class="sub-menu">
+              <li><a class="link_name" href="#">Dashboard</a></li>
+              <li><a href="#">Upcoming Games</a></li>
+              <li><a href="#">Notifcations</a></li>
+              <li><a href="#">Estimated Pay</a></li>
+            </ul>
+          </li>
+
+          <li>
+            <a href="#">
+              <i class='bx bx-football' ></i>
+              <span class="link_name">Companies</span>
+            </a>
+            <ul class="sub-menu blank">
+              <li><a class="link_name" href="/profile/companies">Companies</a></li>
+            </ul>
+          </li>
+          
+          <li>
+            <div class="iocn-link">
+              <a href="#">
+                <i class='bx bx-pie-chart-alt-2' ></i>
+                <span class="link_name">Settings</span>
+              </a>
+              <i class='bx bxs-chevron-down arrow' ></i>
+            </div>
+            <ul class="sub-menu">
+              <li><a class="link_name" href="#"></a></li>
+              <li><a href="#">My Info</a></li>
+              <li><a href="#">Payment Information</a></li> <!-- needs mfa -->
+            </ul>
+          </li>
+
+        <div class="profile-details">
+          <div class="profile-content">
+            <img src="profile.png" alt="profileImg">
+          </div>
+          <div class="name-job">
+            <div class="profile_name">Lewis Summers</div>
+          </div>
+          <a id="logout-icon" style="color: inherit;" href='/profile/logout'><i class='bx bx-log-out' ></i></a>
+        </div>
+        
+    </ul>
+      </div>
+      <section class="home-section">
+        <div class="home-content">
+          <i class='bx bx-menu' ></i>
+          <span class="text">Your Profile</span>
+        </div>
+        <div class="main-content">
+            {% block main %}
+            
+            {% endblock main %}
+        </div>
+      </section>
+
+      <script>
+      let arrow = document.querySelectorAll(".arrow");
+      for (var i = 0; i < arrow.length; i++) {
+        arrow[i].addEventListener("click", (e)=>{
+       let arrowParent = e.target.parentElement.parentElement;//selecting main parent of arrow
+       arrowParent.classList.toggle("showMenu");
+        });
+      }
+      let sidebar = document.querySelector(".sidebar");
+      let sidebarBtn = document.querySelector(".bx-menu");
+      console.log(sidebarBtn);
+      sidebarBtn.addEventListener("click", ()=>{
+        sidebar.classList.toggle("close");
+      });
+      </script>
+      {% block scripts %}
+        
+      {% endblock scripts %}
+</body>
+</html>

@@ -9,4 +9,6 @@ urlpatterns = [
     path('settings', views.settings),
     path('createcompany', views.createcompany),
     path('companies', views.joinGroup),
+    path('logout', views.logout),
+
     ]

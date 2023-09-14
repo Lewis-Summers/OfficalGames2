@@ -174,15 +174,22 @@ def createcompany(request):
             context = {'error':'Company Name is already used.'}
             return render(request, 'user/newcompany.html', context) # this section checks if the company name already exists
         except ObjectDoesNotExist:# if it does not exist
-            Company.objects.create( # it creates a new company
+            newcompany = Company.objects.create( # it creates a new company
                 name=name,
                 leadAdmin=request.user
             )
-            # return redirect(Company)
+            CompanyMembership.objects.create(
+                user = request.user,
+                company = newcompany,
+                isAdmin = True,
+            ) # this is untested so far
+            # return redirect(Company settings) 
     
     return render(request, 'user/newcompany.html', {'error':''})
 
+
 def joinGroup(request):
+    # TODO somehow we also need to make users able to leave companies
     auth = userAuth(request)
     if auth:
         return auth
@@ -199,6 +206,7 @@ def joinGroup(request):
     companies = Company.objects.all() # all companies
     usercompanies = CompanyMembership.objects.filter(user=request.user) # all the companies the user is a part of
     return render(request, 'user/companies.html', {'companies': companies, 'usercompanies': usercompanies})
-    
+
+
 def logout_view(request):
     logout(request)
