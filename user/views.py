@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib import messages
 import re
@@ -73,7 +73,7 @@ def userAuth(request):
     if request.user.is_authenticated:
         return
     else:
-        return render(request, "main/notSignedIn.html")
+        return HttpResponse("Your not logged in") #render(request, "main/notSignedIn.html")
     
 def register(request):
     datapack = {}
@@ -128,10 +128,16 @@ def register(request):
 
 def login_view(request):
     if request.method == 'POST':
-        user = authenticate(request, email=request.POST['email'], password=request.POST['password'])
+        email=request.POST['email']
+        password=request.POST['password']
+        # email="Password is f_f"
+        print(email)
+        print(password)
+        user = authenticate(request, email=email, password=password) # this has been rlly funky needs to be played with to make sure it works right
+        # user = authenticate(request, email='123@gmail.com', password='f')
         if user is not None:
             login(request, user)
-            return redirect('/home')
+            return redirect('/profile')
         else:
             context = {'error':'Invalid username or password.'}
             return render(request, 'user/login.html', context)
@@ -141,7 +147,7 @@ def profile(request):
     auth = userAuth(request)
     if auth:
         return auth
-    return 
+    return HttpResponse('profile')
 
 def settings(request):
     auth = userAuth(request)
@@ -157,7 +163,7 @@ def payments(request):
     return
 
 def createcompany(request):
-    auth = userAuth(request)
+    auth = userAuth(request) # TODO okay so a lot of things need to be added here. we need to add the admin to the company and give the isadmin(or staff) privilages
     # needs MFA
     if auth:
         return auth
@@ -194,3 +200,5 @@ def joinGroup(request):
     usercompanies = CompanyMembership.objects.filter(user=request.user) # all the companies the user is a part of
     return render(request, 'user/companies.html', {'companies': companies, 'usercompanies': usercompanies})
     
+def logout_view(request):
+    logout(request)

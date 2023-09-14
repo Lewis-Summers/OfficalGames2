@@ -2,10 +2,17 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from company.models import *
-from user.views import userAuth
+from user.views import userAuth   
 
 def home(request, companyid):
-    return render(request, "company/companybase.html")
+    auth = userAuth(request)
+    if auth:
+        return auth
+    
+    # TODO this needs alot of error handling 
+    compobj = Company.objects.get(id=companyid)
+    employment = CompanyMembership.objects.get(user = request.user, company=compobj)
+    return render(request, "company/companybase2.html", {'employment': employment})
 
 def officials(request, companyid):
     # this should return a list of all the officals 
