@@ -51,8 +51,9 @@ def userdash(request):
     return HttpResponse(request, "userdash")
 
 def mygames(request):
-    if not userAuth(request):
-        return HttpResponse("your not signed in")
+    auth = userAuth(request)
+    if auth:
+        return auth
     games = []
     user_assignments = Assignment.objects.select_related('game__sport', 'game__field', 'game__league', 'game__home_team', 'game__away_team').filter(user=user)
     user_assignments = user_assignments.prefetch_related('game__assignment_set__user').filter(user=request.user)
