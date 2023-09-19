@@ -46,7 +46,7 @@ def game(request, companyid, gameid):
     # returns information about a specific game
     return
 
-def userdash(request):
+def userdash(request, companyid):
     # returns user dash and all the important inforamtion like notifactions, profile, settings, upcoming games, and maybe some upcoming game information
     return HttpResponse(request, "userdash")
 
@@ -75,20 +75,28 @@ def mygames(request):
         #         assignment.role
     return
 
-def selfassign(request):
+def selfassign(request, companyid):
     # returns information about open games and lets a user submit a request
     # FORM
     return
 
-def aftergames(request):
+def aftergames(request, companyid):
     # returns a list of all the games you need to do do after games on
     return
 
-def aftergame(request):
+def aftergame(request, companyid):
     # returns information to fill in for each game specifically should have easy switching between games
     # FORM
     return
 
-def estpay(request):
+def estpay(request, companyid):
+    # return a table with all the games and there value
+    return
+
+def payscales(request, companyid):
+    # return a table with all the games and there value
+    return
+
+def gamepay(request, companyid):
     # return a table with all the games and there value
     return
