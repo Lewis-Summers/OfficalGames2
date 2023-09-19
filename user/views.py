@@ -153,7 +153,7 @@ def settings(request):
     auth = userAuth(request)
     if auth:
         return auth
-    return
+    return render(request, "user/settings.html")
     
 def payments(request):
     auth = userAuth(request)
