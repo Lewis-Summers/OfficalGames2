@@ -4,7 +4,6 @@ from django.db import IntegrityError
 from django.contrib import messages
 import re
 from django.utils.safestring import mark_safe
-from user.views import userAuth  
 from public.backends import EmailBackend
 from user.models import User
 
@@ -70,10 +69,6 @@ def validate(data):
                         errorList.append(f"Backend Error, Please Resubmit\nError Code:{e}")
 
     return errorList
-    if request.user.is_authenticated:
-        return
-    else:
-        return HttpResponse("Your not logged in") #render(request, "main/notSignedIn.html")
     
 def register(request):
     # check if they are already logged in 
@@ -139,6 +134,16 @@ def home(request):
 
 def login_view(request):
     # check if they are already logged in 
+    if request.user.is_authenticated:
+        next_url = request.GET.get('next')
+        if next_url:
+            # Redirect to the URL specified in the 'next' parameter
+            return redirect(next_url)
+        else:
+            # Redirect to users profile dashboard
+            return redirect('/profile/dashboard')
+        
+
     if request.method == 'POST':
         username=request.POST['username']
         password=request.POST['password']
