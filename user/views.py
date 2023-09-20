@@ -41,7 +41,7 @@ def createcompany(request):
                 company = newcompany,
                 isAdmin = True,
             ) # this is untested so far
-            # return redirect(Company settings) 
+            # TODO return redirect(Company settings) 
     
     return render(request, 'user/newcompany.html', {'error':''})
 

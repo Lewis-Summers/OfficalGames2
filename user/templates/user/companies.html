@@ -33,7 +33,7 @@
         <tbody>
             {% for company in usercompanies %}
                 <tr>
-                    <td>{{company.company.name}}</td>
+                    <td><a href='/company/{{company.company.id}}/home'>{{company.company.name}}</a></td>
                     <td>{{company.isAdmin}}</td>
                     <td>{% if company.isAdmin %}Staff{% else %}User{% endif %}</td>
                     <td>{{company.company.leadAdmin.username}}</td>
@@ -55,7 +55,8 @@
           
           <button type="submit">Join</button>
         </form>
-      </div>         
+      </div>
+      <a href="createcompany">Register a New Company</a>         
 </div>
 
 {% endblock main %}

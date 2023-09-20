@@ -9,6 +9,7 @@ def home(request, companyid):
     # TODO this needs alot of error handling 
     compobj = Company.objects.get(id=companyid)
     employment = CompanyMembership.objects.get(user = request.user, company=compobj)
+    print(employment.isAdmin)
     return render(request, "company/companybase2.html", {'employment': employment})
 @login_required
 def officials(request, companyid):

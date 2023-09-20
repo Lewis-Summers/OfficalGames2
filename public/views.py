@@ -80,7 +80,7 @@ def register(request):
     if request.method == 'POST': # gets all the info from the form
         fname = request.POST['fname']
         lname = request.POST['lname']
-        username = request.POST["username"]
+        # username = request.POST["username"]
         email = request.POST['email']
         phone_number = request.POST['phone_number']
         # username = request.POST['username']
@@ -90,7 +90,7 @@ def register(request):
         userdata = { # puts it in a dict for the validate fucntion
             'fname': fname,
             'lname': lname,
-            'username': username,
+            # 'username': username,
             'email': email,
             'phone_number': phone_number,
             'match_password': [password1, password2]
@@ -99,7 +99,7 @@ def register(request):
         datapack = { # this is for making sure that the data in the forms stays the same if we reload the page
                 "fname": fname,
                 "lname": lname,
-                'username': username,
+                # 'username': username,
                 "email": email,
                 "phone_number": phone_number,
             }
@@ -114,7 +114,7 @@ def register(request):
                 
                 else:#creates a user obj
                     user = User.objects.create_user(
-                        username=username,
+                        username=email,
                         first_name=fname,
                         last_name=lname,
                         email=email,

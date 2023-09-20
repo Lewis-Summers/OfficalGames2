@@ -51,7 +51,7 @@
             </ul>
           </li>
           
-           {% if employment.isadmin %} <!-- This needs to be tested -->
+           {% if employment.isadmin == True%} <!-- This needs to be tested -->
             {% include 'company\includes\admindropdown.html' %}
           {% endif %}
 
