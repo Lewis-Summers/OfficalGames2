@@ -139,11 +139,6 @@ def home(request):
 
 def login_view(request):
     # check if they are already logged in 
-    # auth = userAuth(request)
-    # print(auth)
-    # if auth is not None:
-    #     return redirect('/profile/dashboard')
-    
     if request.method == 'POST':
         username=request.POST['username']
         password=request.POST['password']
@@ -152,7 +147,13 @@ def login_view(request):
         # print(user)
         if user is not None:
             login(request, user)
-            return redirect('/profile/dashboard')
+            next_url = request.GET.get('next')
+            if next_url:
+                # Redirect to the URL specified in the 'next' parameter
+                return redirect(next_url)
+            else:
+                # Redirect to users profile dashboard
+                return redirect('/profile/dashboard')
         else:
             context = {'error':'Invalid username or password.'}
             return render(request, 'public/login.html', context)

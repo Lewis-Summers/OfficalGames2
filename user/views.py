@@ -6,38 +6,25 @@ from django.contrib.auth.models import User
 from company.models import Company, CompanyMembership
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.safestring import mark_safe
-
-def userAuth(request):
-    if request.user.is_authenticated:
-        return
-    else:
-        return HttpResponse("Your not logged in bro") #render(request, "main/notSignedIn.html")
-
+from django.contrib.auth.decorators import login_required
+    
+@login_required
 def profile(request):
-    auth = userAuth(request)
-    if auth:
-        return auth
     return render(request, "user/profiledashboard.html")
 
+
+@login_required
 def settings(request):
-    auth = userAuth(request)
-    if auth:
-        return auth
     return render(request, "user/settings.html")
-    
+
+@login_required
 def payments(request):
-    auth = userAuth(request)
-    # needs MFA
-    if auth:
-        return auth
     return
 
+
+@login_required
 def createcompany(request):
-    auth = userAuth(request) # TODO okay so a lot of things need to be added here. we need to add the admin to the company and give the isadmin(or staff) privilages
-    # needs MFA
-    if auth:
-        return auth
-    
+   # need MFA
     if request.method == 'POST':
         name = request.POST['companyname']
         try:
@@ -59,11 +46,9 @@ def createcompany(request):
     return render(request, 'user/newcompany.html', {'error':''})
 
 
+@login_required
 def joinGroup(request):
     # TODO somehow we also need to make users able to leave companies
-    auth = userAuth(request)
-    if auth:
-        return auth
     if request.method == 'POST':
         companyid = request.POST['companyid']
         try:
