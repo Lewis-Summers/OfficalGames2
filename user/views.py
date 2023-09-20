@@ -1,5 +1,4 @@
 from django.shortcuts import render, HttpResponse, redirect
-from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib import messages
 import re
@@ -79,7 +78,3 @@ def joinGroup(request):
     usercompanies = CompanyMembership.objects.filter(user=request.user) # all the companies the user is a part of
     return render(request, 'user/companies.html', {'companies': companies, 'usercompanies': usercompanies})
 
-
-def logout_view(request):
-    logout(request)
-    return redirect('/login')  # Redirect to the login page after logout
