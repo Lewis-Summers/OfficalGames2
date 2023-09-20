@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div id="regform">
+      <form method="post">
+        {% csrf_token %}
+        <br>
+        <label for="id_fname">First Name:</label>
+        <input type="text" id="id_fname" name="fname" value="{% if datapack %}{{datapack.fname}}{% endif %}" required />
+        <br />
+
+        <label for="id_lname">Last Name:</label>
+        <input type="text" id="id_lname" name="lname" value="{% if datapack %}{{datapack.lname}}{% endif %}" required />
+        <br />
+
+        <label for="id_email">Email:</label>
+        <input type="email" id="id_email" name="email" value="{% if datapack %}{{datapack.email}}{% endif %}" required />
+        <br />
+
+        <label for='id_username'>Username:</label>
+        <input type="text" id="id_username" name="username" value="{% if datapack %}{{datapack.username}}{% endif %}" required />
+
+        <label for="id_phone_number">Phone Number:</label>
+        <input type="text" id="id_phone_number" name="phone_number" value="{% if datapack %}{{datapack.phone_number}}{% endif %}" required />
+        <br />
+
+        <label for="id_password1">Password:</label>
+        <input type="password" id="id_password1" name="password1" required />
+        <br />
+
+        <label for="id_password2">Confirm Password:</label>
+        <input type="password" id="id_password2" name="password2" required />
+        <br />
+        <button type="submit">Register</button>
+      </form>
+
+      {% include 'user/includes/messages.html' %}
+
+    </div>
+  </body>
+</html>

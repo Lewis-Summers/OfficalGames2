@@ -4,6 +4,11 @@ from django.db import IntegrityError
 from django.contrib import messages
 import re
 from django.utils.safestring import mark_safe
+from user.views import userAuth  
+from public.backends import EmailBackend
+from user.models import User
+
+
 
 def validate(data):
     errorList = []
@@ -71,11 +76,16 @@ def validate(data):
         return HttpResponse("Your not logged in") #render(request, "main/notSignedIn.html")
     
 def register(request):
-    # TODO needs to check if they are already logged in 
+    # check if they are already logged in 
+    # auth = userAuth(request)
+    # if auth:
+    #     return redirect('/profile/dashboard')
+    
     datapack = {}
     if request.method == 'POST': # gets all the info from the form
         fname = request.POST['fname']
         lname = request.POST['lname']
+        username = request.POST["username"]
         email = request.POST['email']
         phone_number = request.POST['phone_number']
         # username = request.POST['username']
@@ -85,6 +95,7 @@ def register(request):
         userdata = { # puts it in a dict for the validate fucntion
             'fname': fname,
             'lname': lname,
+            'username': username,
             'email': email,
             'phone_number': phone_number,
             'match_password': [password1, password2]
@@ -93,6 +104,7 @@ def register(request):
         datapack = { # this is for making sure that the data in the forms stays the same if we reload the page
                 "fname": fname,
                 "lname": lname,
+                'username': username,
                 "email": email,
                 "phone_number": phone_number,
             }
@@ -107,7 +119,7 @@ def register(request):
                 
                 else:#creates a user obj
                     user = User.objects.create_user(
-                        username=f"{fname}_{lname}",
+                        username=username,
                         first_name=fname,
                         last_name=lname,
                         email=email,
@@ -115,6 +127,7 @@ def register(request):
                         phone_number=phone_number,
                     )
                     user.save()
+                    login(request, user)
                     return redirect('/profile/dashboard') 
 
             except IntegrityError as e:
@@ -122,22 +135,25 @@ def register(request):
     return render(request, 'public/register.html', {"datapack": datapack})
 
 def home(request):
-    return HttpResponse("Hello public!")
+    return render(request, 'public/home.html')
 
 def login_view(request):
-    # TODO needs to check if they are already logged in 
+    # check if they are already logged in 
+    # auth = userAuth(request)
+    # print(auth)
+    # if auth is not None:
+    #     return redirect('/profile/dashboard')
+    
     if request.method == 'POST':
-        email=request.POST['email']
+        username=request.POST['username']
         password=request.POST['password']
-        # email="Password is f_f"
-        print(email)
-        print(password)
-        user = authenticate(request, email=email, password=password) # this has been rlly funky needs to be played with to make sure it works right
-        # user = authenticate(request, email='123@gmail.com', password='f')
+        password = password.strip()
+        user = authenticate(request, username=username, password=password)
+        # print(user)
         if user is not None:
             login(request, user)
-            return redirect('/profile')
+            return redirect('/profile/dashboard')
         else:
             context = {'error':'Invalid username or password.'}
-            return render(request, 'user/login.html', context)
-    return render(request, 'login.html', {'error':''})
+            return render(request, 'public/login.html', context)
+    return render(request, 'public/login.html', {'error':''})

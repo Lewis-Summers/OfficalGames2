@@ -31,5 +31,5 @@ urlpatterns = [
     # officials
     # send emails
     # announcements
-    path('settings')
+    # path('settings')
 ]

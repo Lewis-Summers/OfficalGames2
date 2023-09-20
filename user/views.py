@@ -12,13 +12,13 @@ def userAuth(request):
     if request.user.is_authenticated:
         return
     else:
-        return HttpResponse("Your not logged in") #render(request, "main/notSignedIn.html")
+        return HttpResponse("Your not logged in bro") #render(request, "main/notSignedIn.html")
 
 def profile(request):
     auth = userAuth(request)
     if auth:
         return auth
-    return HttpResponse('profile')
+    return render(request, "user/profiledashboard.html")
 
 def settings(request):
     auth = userAuth(request)
@@ -74,7 +74,7 @@ def joinGroup(request):
             except ObjectDoesNotExist:
                 CompanyMembership.objects.create(company=addedCompany, user=request.user) # creates the a CompanyMembership
         except ObjectDoesNotExist:
-            print("obj not exist") #needs to find a way to handle if thats not a valid company id
+            print("obj not exist") # TODO needs to find a way to handle if thats not a valid company id
     companies = Company.objects.all() # all companies
     usercompanies = CompanyMembership.objects.filter(user=request.user) # all the companies the user is a part of
     return render(request, 'user/companies.html', {'companies': companies, 'usercompanies': usercompanies})
@@ -82,3 +82,4 @@ def joinGroup(request):
 
 def logout_view(request):
     logout(request)
+    return redirect('/login')  # Redirect to the login page after logout
