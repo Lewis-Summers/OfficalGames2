@@ -5,7 +5,6 @@ urlpatterns = [
     path('<int:companyid>/home', views.home, name='dashboard'),
     
     #info
-    path('<int:companyid>/info/officials',  views.officials, name='officials'),
     path('<int:companyid>/info/officials/official/<int:id>',  views.official, name='offical'),
     path('<int:companyid>/info/leagues',  views.leagues, name='leagues'),
     path('<int:companyid>/info/leagues/league/<int:id>',  views.league, name='league'),
@@ -17,19 +16,20 @@ urlpatterns = [
     path('<int:companyid>/info/gamepay/<int:scaleid>', views.gamepay, name="gamepay"), 
 
     # user dash
-    path('<int:companyid>/userdash/', views.userdash),
-    path('<int:companyid>/userdash/estpay', views.userdash),
+    path('<int:companyid>/userdash/', views.home),
+    path('<int:companyid>/userdash/estpay', views.home),
     path('<int:companyid>/userdash/games/mygames', views.mygames),
     path('<int:companyid>/userdash/games/selfassign', views.selfassign),
     path('<int:companyid>/userdash/games/aftergames', views.aftergames),
     path('<int:companyid>/userdash/games/aftergame/<int:gameid>', views.aftergame),
 
     # admin
-    # settings
-    # payments 
-    # create payscale
-    # officials
-    # send emails
-    # announcements
-    # path('settings')
+    # TODO invite users, send users email invites to join companies
+    path('<int:companyid>/admin/games', views.home, name='all games'),
+    path('<int:companyid>/admin/officials',  views.officials, name='officials'),
+    path('<int:companyid>/admin/payments', views.home, name='payments'),
+    path('<int:companyid>/admin/sendemails', views.home, name='send emails'),
+    path('<int:companyid>/admin/announcements', views.home, name='announcements'),
+    path('<int:companyid>/admin/settings', views.home, name='settings'),
+    path('<int:companyid>/admin/dashboard', views.home, name='admin dashboard'),
 ]

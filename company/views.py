@@ -4,17 +4,22 @@ from django.template import loader
 from company.models import *
 from django.contrib.auth.decorators import login_required
 
-@login_required
-def home(request, companyid):
+def getemployment(request, companyid):
     # TODO this needs alot of error handling 
     compobj = Company.objects.get(id=companyid)
-    employment = CompanyMembership.objects.get(user = request.user, company=compobj)
-    print(employment.isAdmin)
-    return render(request, "company/companybase2.html", {'employment': employment})
+    return CompanyMembership.objects.get(user = request.user, company=compobj)
+
+@login_required
+def home(request, companyid):
+    employment = getemployment(request, companyid)
+    return render(request, "company/home.html", {'employment': employment})
+
 @login_required
 def officials(request, companyid):
     # this should return a list of all the officals 
-    return HttpResponse('hi')
+    employment = getemployment(request, companyid)
+    refs = CompanyMembership.objects.filter(company=companyid)
+    return render(request, "company/officials.html", {'employment': employment, 'refs':refs})
 @login_required
 def official(request, companyid, id):
     # this returns a single officals profile
@@ -43,10 +48,7 @@ def feild(request, companyid, complexid, feildid):
 def game(request, companyid, gameid):
     # returns information about a specific game
     return
-@login_required
-def userdash(request, companyid):
-    # returns user dash and all the important inforamtion like notifactions, profile, settings, upcoming games, and maybe some upcoming game information
-    return HttpResponse(request, "userdash")
+
 @login_required
 def mygames(request):
     games = []

@@ -1,14 +1,87 @@
-{% extends 'companybase.html' %}
-{% block title %}Offical #{{offical.id}}{% endblock title %}
-{% block style %}{% endblock style %}
+{% extends 'company/companybase2.html' %}
+{% load static %}
+{% block title %}Officals{% endblock title %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'company/officials.css' %}">
+{% endblock style %}
 {% block main %}
-<div id="refinfo">
-    {% for info in refinfo %}
-        {{info}}: {{refinfo[info]}}
-    {% endfor %}
-</div>
-<div>
-    list of games the have been assigned to by date
+<div style="padding: 20px;">
+    <h1>This is a admin page - Officals</h1>
+        <div>
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search...">
+            </div>
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                         <tr>
+                             <th class='id'>ID</th>
+                             <th class='name'>Name</th>
+                             <th class='email'>Email</th>
+                             <th class='phone'>Phone Number</th>
+                             <th class='perm'>Permissions</th>
+                        </tr>
+                    </thead>
+                    <tbody id='tbody'>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
 </div>
 {% endblock main %}
-{% block scripts %}{% endblock scripts %}
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search');
+    const tableBody = document.querySelector('#tbody');
+
+    // Sample data, replace with your data source
+    const data = [
+            {% for ref in refs %}
+                {
+                    id: {{ref.id}},
+                    name: '{{ref.user.get_full_name}}',
+                    email: '{{ref.user.email}}',
+                    phone: '{{ref.user.phone_number}}',
+                    perm: {% if ref.isAdmin %}'Staff'{% else %}'User'{% endif %}
+                },
+            {% endfor %}
+        ];
+    console.log(data);
+
+    // Function to populate the table with data
+    function populateTable(data) {
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+            <td class='id'>${item.id}</td>
+            <td class='name'>${item.name}</td>
+            <td class='email'>${item.email}</td>
+            <td class='phone'>${item.phone}</td>
+            <td class='perm'>${item.perm}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Initial table population
+    populateTable(data);
+
+    // Event listener for the search input
+    searchInput.addEventListener('input', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        // Filter the data based on the search term
+        const filteredData = data.filter(item =>
+            item.name.toLowerCase().includes(searchTerm)
+        );
+
+        // Update the table with filtered data
+        populateTable(filteredData);
+    });
+});
+</script>
+{% endblock scripts %}

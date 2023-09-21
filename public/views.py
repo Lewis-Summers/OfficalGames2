@@ -142,7 +142,7 @@ def login_view(request):
         else:
             # Redirect to users profile dashboard
             return redirect('/profile/dashboard')
-        
+    # TODO needs to get user to verify email address
 
     if request.method == 'POST':
         username=request.POST['username']

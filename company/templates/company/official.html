@@ -1,0 +1,14 @@
+{% extends 'company/companybase2.html' %}
+{% block title %}Offical #{{offical.id}}{% endblock title %}
+{% block style %}{% endblock style %}
+{% block main %}
+<div id="refinfo">
+    {% for info in refinfo %}
+        {{info}}: {{refinfo[info]}}
+    {% endfor %}
+</div>
+<div>
+    list of games the have been assigned to by date
+</div>
+{% endblock main %}
+{% block scripts %}{% endblock scripts %}

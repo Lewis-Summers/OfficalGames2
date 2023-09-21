@@ -1,19 +1,18 @@
 <li>
     <div class="iocn-link">
-      <a href="#">
+      <a href="{% url 'admin dashboard' companyid=employment.company.id %}">
         <i class='bx bx-pie-chart-alt-2' ></i>
         <span class="link_name">Admin Dashboard</span>
       </a>
       <i class='bx bxs-chevron-down arrow' ></i>
     </div>
     <ul class="sub-menu">
-      <li><a class="link_name" href="#">Admin Dashboard</a></li>
-      <li><a href="/info/officials">Officials</a></li>
-      <li><a href="#">Games</a></li>
-      <li><a href="#">Announcements</a></li>
-      <li><a href="#">Game Pay</a></li>
-      <li><a href="#">Payments</a></li>
-      <li><a href="#">Send Emails</a></li>
-      <li><a href="#">Company Settings</a></li>
+      <li><a class="link_name" href="admin/dashboard">Admin Dashboard</a></li>
+      <li><a href="{% url 'officials' companyid=employment.company.id %}">Officials</a></li>
+      <li><a href="{% url 'all games' companyid=employment.company.id %}">Games</a></li>
+      <li><a href="{% url 'announcements' companyid=employment.company.id %}">Announcements</a></li>
+      <li><a href="{% url 'payments' companyid=employment.company.id %}">Payments</a></li>
+      <li><a href="{% url 'dashboard' companyid=employment.company.id %}">Send Emails</a></li>
+      <li><a href="{% url 'settings' companyid=employment.company.id %}">Company Settings</a></li>
     </ul>
 </li>

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'company/companybase.css' %}">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    {% block style %}{% endblock style %}
     <title>{% block title %}Official Games{% endblock title %}</title>
 </head>
 <body>
@@ -50,8 +51,7 @@
               <li><a href="#">Contact</a></li>
             </ul>
           </li>
-          
-           {% if employment.isadmin == True%} <!-- This needs to be tested -->
+           {% if employment.isAdmin %} <!-- This needs to be tested -->
             {% include 'company\includes\admindropdown.html' %}
           {% endif %}
 
@@ -61,7 +61,7 @@
             </div>
             <div class="name-job">
               <div class="profile_name">{{employment.user.get_full_name}}</div>
-              <div class="job">{% if employment.isadmin %}Admin{% else %}Referee{% endif %}</div> <!-- this doesnt work yet because the we never changed isadmin for admins or staff. They are not even automatically in the company they start-->
+              <div class="job">{% if employment.isAdmin %}Admin{% else %}Referee{% endif %}</div> <!-- this doesnt work yet because the we never changed isadmin for admins or staff. They are not even automatically in the company they start-->
             </div>
             <a id="logout-icon" style="color: inherit;" href='/profile/logout'><i class='bx bx-log-out' ></i></a>
           </div>
