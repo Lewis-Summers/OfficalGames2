@@ -11,7 +11,7 @@ urlpatterns = [
     path('<int:companyid>/info/complexs', views.complexs, name='complex'),
     path('<int:companyid>/info/complexs/complex/<int:complexid>', views.complex, name='complex'),
     path('<int:companyid>/info/complexs/complex/<int:complexid>/feild/<int:feildid>', views.feild, name='feild'),
-    path('<int:companyid>/info/game/<int:gameid>', views.game, name="game"), # this is right we wont have a all games page we just have a game look up type thing here
+    path('<int:companyid>/info/game/<int:gameid>', views.gameinfo, name="game"), # this is right we wont have a all games page we just have a game look up type thing here
     path('<int:companyid>/info/gamepay', views.payscales, name="gamepay"),
     path('<int:companyid>/info/gamepay/<int:scaleid>', views.gamepay, name="gamepay"), 
 
@@ -25,7 +25,7 @@ urlpatterns = [
 
     # admin
     # TODO invite users, send users email invites to join companies
-    path('<int:companyid>/admin/games', views.home, name='all games'),
+    path('<int:companyid>/admin/games', views.games, name='all games'),
     path('<int:companyid>/admin/officials',  views.officials, name='officials'),
     path('<int:companyid>/admin/payments', views.home, name='payments'),
     path('<int:companyid>/admin/sendemails', views.home, name='send emails'),

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from company.models import *
 from django.contrib.auth.decorators import login_required
@@ -20,32 +20,39 @@ def officials(request, companyid):
     employment = getemployment(request, companyid)
     refs = CompanyMembership.objects.filter(company=companyid)
     return render(request, "company/officials.html", {'employment': employment, 'refs':refs})
+
 @login_required
 def official(request, companyid, id):
     # this returns a single officals profile
     return
+
 @login_required
 def leagues(request, companyid):
     # returns a list of leagues
     return
+
 @login_required
 def league(request, companyid, id):
     # returns information about a league
     return
+
 @login_required
 def complexs(request, companyid):
     # returns a list of complexs
     return HttpResponse(companyid)
+
 @login_required
 def complex(request, companyid, complexid):
     # returns information about a complex including all the feilds
     return
+
 @login_required
 def feild(request, companyid, complexid, feildid):
     # returns information about a feild in a complex
     return
+
 @login_required
-def game(request, companyid, gameid):
+def gameinfo(request, companyid, gameid):
     # returns information about a specific game
     return
 
@@ -103,3 +110,19 @@ def payscales(request, companyid):
 def gamepay(request, companyid):
     # return a table with all the games and there value
     return
+
+@login_required
+def games(request, companyid):
+    games = Game.objects.filter(companyid)
+    return render(request, "company/games.html", {'': ''})
+
+def fetchgamesdata(request):
+    selected_option = request.GET.get('selected_option')
+    url = request.GET.get('referring_url')
+
+    selectedSport = Sport.objects.get(name=selected_option, Company=request.GET.get)
+    games = Game.objects.filter(Sport=selectedSport)
+    data = []
+    for game in games:
+        pass
+    return JsonResponse(data)

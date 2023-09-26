@@ -1,34 +1,106 @@
-{% extends 'companybase2.html' %}
-{% block title %}My Games{% endblock title %}
-{% block style %}{% endblock style %}
+{% extends 'company/companybase2.html' %}
+{% load static %}
+{% block title %}Games{% endblock title %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'company/officials.css' %}">
+{% endblock style %}
 {% block main %}
-    <h1>This is a admin page</h1>
-    Idek
-    <div>
+<div style="padding: 20px;">
+    <h1>This is a admin page - Games</h1>
+        <div><!-- Needs an add game feature -->
+            <div class="search-container"> <!-- We should have like a search by critera so you can search by Permissions or by name or email or whatever-->
+                <input type="text" id="search" placeholder="Search...">
+            </div>
+            <div class="data-table-container"> 
+                <table class="data-table">
+                    <thead>
+                         <tr>
+                            <th class='id'>Game ID</th>
+                            <th class='league'>League</th>
+                            <th class='complex'>Complex</th>
+                            <th class='field'>Field</th>
+                            <th class='datetime'>Date Time</th>
+                            <th class='refs'>Officals Assigned</th>
+                        </tr>
+                    </thead>
+                    <tbody id='tbody'>
 
-        <table class="">
-            <thead>
-                 <tr>
-                     <th>Game ID</th>
-                     <th>League</th>
-                     <th>Complex and Feild</th>
-                     <th>Date Time</th>
-                     <th>Officals Assigned</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for game in games %}
-                    <tr>
-                        <td>{{game.gameid}}</td>
-                        <td>{{game.league}}</td>
-                        <td>{{game.complex}} - {{game.feild}}</td>
-                        <td>{{game.date_time}}</td>
-                        <td>{% for ref in Assignment.%}</td> <!-- TODO this dont work-->
-                    </tr>
-                {% endfor %}
-
-            </tbody>
-        </table>
-    </div>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>
 {% endblock main %}
-{% block scripts %}{% endblock scripts %}
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search');
+    const tableBody = document.querySelector('#tbody');
+
+
+    // Sample data, replace with your data source
+    let data = [];
+
+    $(document).ready(function() {
+        // Attach an event listener to the dropdown
+        $('#dropdown').on('change', function() {
+            var selectedOption = $(this).val();
+            // Make an AJAX request to fetch data
+            var referringUrl = document.referrer;
+            $.ajax({
+                type: 'GET',
+                url: '/fetch/',  // URL of your Django view
+                data: {
+                    selected_option: selectedOption,
+                    referring_url: referringUrl
+                },
+                success: function(data) {
+                    // Update the data-display div with fetched data
+                    data = [
+                    
+                    ]
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+    // Function to populate the table with data
+    function populateTable(data) {
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+            <td class='id'>${item.id}</td>
+            <td class='name'>${item.name}</td>
+            <td class='email'>${item.email}</td>
+            <td class='phone'>${item.phone}</td>
+            <td class='perm'>${item.perm}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Initial table population
+    populateTable(data);
+
+    // Event listener for the search input
+    searchInput.addEventListener('input', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        // Filter the data based on the search term
+        const filteredData = data.filter(item =>
+            item.name.toLowerCase().includes(searchTerm)
+        );
+
+        // Update the table with filtered data
+        populateTable(filteredData);
+    });
+});
+</script>
+{% endblock scripts %}
