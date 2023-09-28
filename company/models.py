@@ -21,6 +21,7 @@ class Company(models.Model):
 
 class Role(models.Model):
     name = models.CharField(max_length=255)
+    # sport
 
 # Step 2: Tables with foreign key references to tables created in Step 1
 class Sport(models.Model):
@@ -88,6 +89,7 @@ class Game(models.Model):
     admin_notes = models.TextField(null=True)
     game_report = models.TextField(null=True)
     needs_admin = models.BooleanField(null=True)
+
 
 
 class PayScale(models.Model):

@@ -8,6 +8,14 @@
 <div style="padding: 20px;">
     <h1>This is a admin page - Games</h1>
         <div><!-- Needs an add game feature -->
+            <div class="sportdropdown">
+                <select id="dropdown">
+                        <option disabled selected>Pick your sport</option>
+                    {% for sport in sports %}
+                        <option value="{{sport}}">{{sport}}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="search-container"> <!-- We should have like a search by critera so you can search by Permissions or by name or email or whatever-->
                 <input type="text" id="search" placeholder="Search...">
             </div>
@@ -29,6 +37,9 @@
                 </table>
             </div>
         </div>
+        <div id="test">
+
+        </div>
 </div>
 {% endblock main %}
 {% block scripts %}
@@ -48,19 +59,16 @@
         $('#dropdown').on('change', function() {
             var selectedOption = $(this).val();
             // Make an AJAX request to fetch data
-            var referringUrl = document.referrer;
             $.ajax({
                 type: 'GET',
-                url: '/fetch/',  // URL of your Django view
+                url: '/company/fetch/gamesdata',  // URL of your Django view
                 data: {
                     selected_option: selectedOption,
-                    referring_url: referringUrl
+                    companyid: {{companyid}}
                 },
-                success: function(data) {
-                    // Update the data-display div with fetched data
-                    data = [
-                    
-                    ]
+                success: function(fetcheddata) {
+                    data = fetcheddata
+                    populateTable(fetcheddata)
                 },
                 error: function(error) {
                     console.log(error);
@@ -73,21 +81,24 @@
     function populateTable(data) {
         tableBody.innerHTML = ''; // Clear existing rows
 
-        data.forEach(item => {
+        data.forEach(game => {
             const row = document.createElement('tr');
             row.innerHTML = `
-            <td class='id'>${item.id}</td>
-            <td class='name'>${item.name}</td>
-            <td class='email'>${item.email}</td>
-            <td class='phone'>${item.phone}</td>
-            <td class='perm'>${item.perm}</td>
+            <td class='id'><a href="/company/{{companyid}}/info/game/${game.id}">${game.assid}</td>
+            <td class='league'>${game.league}</td>
+            <td class='complex'>${game.complex}</td>
+            <td class='field'>${game.field}</td>
+            <td class='datetime'>${game.datetime}</td>
+            <td class='refs'>
+                ${game.refs.map(ref => `${ref.role} - ${ref.full_name}`).join('<br>')}
+            </td>
             `;
             tableBody.appendChild(row);
         });
     }
 
     // Initial table population
-    populateTable(data);
+    // populateTable(data);
 
     // Event listener for the search input
     searchInput.addEventListener('input', function () {

@@ -3,6 +3,9 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from company.models import *
 from django.contrib.auth.decorators import login_required
+# from urllib.parse import urlparse, parse_qs
+from django.apps import apps
+
 
 def getemployment(request, companyid):
     # TODO this needs alot of error handling 
@@ -78,8 +81,8 @@ def mygames(request):
         #     for assignment in refassignment:
         #         assignment.role
     return
-@login_required
 
+@login_required
 def selfassign(request, companyid):
     # returns information about open games and lets a user submit a request
     # FORM
@@ -113,16 +116,49 @@ def gamepay(request, companyid):
 
 @login_required
 def games(request, companyid):
-    games = Game.objects.filter(companyid)
-    return render(request, "company/games.html", {'': ''})
+    employment = getemployment(request, companyid)
+    sports = [sport.name for sport in Sport.objects.filter(company = Company.objects.get(id = companyid))]
+    return render(request, "company/games.html", {'employment': employment, 'sports': sports, 'companyid': companyid})
 
 def fetchgamesdata(request):
     selected_option = request.GET.get('selected_option')
-    url = request.GET.get('referring_url')
+    companyid2 = request.GET.get('companyid')
 
-    selectedSport = Sport.objects.get(name=selected_option, Company=request.GET.get)
-    games = Game.objects.filter(Sport=selectedSport)
+    selectedSport = Sport.objects.get(name=selected_option, company=Company.objects.get(id=companyid2))
+    selectedGames = Game.objects.filter(sport=selectedSport)
     data = []
-    for game in games:
-        pass
-    return JsonResponse(data)
+
+    games = Game.objects.filter(sport_id=selectedSport).values(
+    'id',
+    'assigned_game_id',
+    'league__name',  # Assuming 'name' is a field in the 'Leagues' model
+    'field__complex__name',  # Replace 'complex_field' with the actual field name in the 'Field' model
+    'date_time',
+    'field__name'  # Select the 'field' ForeignKey directly
+    )
+
+
+    # Iterate through the queryset and access the selected fields
+    for game in games:    
+        refs = Assignment.objects.filter(game=Game.objects.get(id=game['id']))
+        refdata = []
+        for ref in refs: # gets all data from the refs and puts it in a dictionary to be put into the gamedata dict
+            ref_info = {
+                'full_name': ref.user.get_full_name(),
+                'role': ref.role.name
+            }
+            refdata.append(ref_info)
+        print(refdata)
+        gamedata = {
+             'id':game['id'],
+             'assid': game['assigned_game_id'],
+             'league': game['league__name'],
+             'complex': game['field__complex__name'],
+             'datetime': game['date_time'],
+             'field': game['field__name'],
+             'refs': refdata
+             }
+        for feild in gamedata:
+            gamedata[feild] = '--' if gamedata[feild] is None else gamedata[feild] # sets all null feilds to -- 
+        data.append(gamedata)
+    return JsonResponse(data, safe=False)
