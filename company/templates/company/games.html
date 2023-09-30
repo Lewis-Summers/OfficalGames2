@@ -2,23 +2,35 @@
 {% load static %}
 {% block title %}Games{% endblock title %}
 {% block style %}
-<link rel="stylesheet" href="{% static 'company/officials.css' %}">
+<link rel="stylesheet" href="{% static 'company/games.css' %}">
 {% endblock style %}
 {% block main %}
 <div style="padding: 20px;">
     <h1>This is a admin page - Games</h1>
         <div><!-- Needs an add game feature -->
-            <div class="sportdropdown">
-                <select id="dropdown">
+            <div class="sport-dropdown-container">
+                <select id="sport-dropdown">
                         <option disabled selected>Pick your sport</option>
                     {% for sport in sports %}
                         <option value="{{sport}}">{{sport}}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="search-container"> <!-- We should have like a search by critera so you can search by Permissions or by name or email or whatever-->
-                <input type="text" id="search" placeholder="Search...">
-            </div>
+            <div class="search-container">
+                <div class="dropdown">
+                    <select id="search-criteria">
+                        <option value="assid">Game ID</option>
+                        <option value="league">League</option>
+                        <option value="complex">Complex</option>
+                        <option value="field">Field</option>
+                        <option value="datetime">Date Time</option>
+                        <option value="refs">Officals Assigned</option>
+                    </select>
+                </div>
+                <span>
+                    <input type="text" id="search-bar" placeholder="Search...">
+                </span>
+            </div>                 
             <div class="data-table-container"> 
                 <table class="data-table">
                     <thead>
@@ -47,7 +59,8 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('search');
+    const searchInput = document.getElementById('search-bar');
+    const searchCriteriaDrop = document.getElementById('search-criteria');
     const tableBody = document.querySelector('#tbody');
 
 
@@ -56,7 +69,7 @@
 
     $(document).ready(function() {
         // Attach an event listener to the dropdown
-        $('#dropdown').on('change', function() {
+        $('#sport-dropdown').on('change', function() {
             var selectedOption = $(this).val();
             // Make an AJAX request to fetch data
             $.ajax({
@@ -101,17 +114,28 @@
     // populateTable(data);
 
     // Event listener for the search input
-    searchInput.addEventListener('input', function () {
+    function checkvals() {
         const searchTerm = searchInput.value.toLowerCase();
-
+        const searchCriteria = searchCriteriaDrop.value;
         // Filter the data based on the search term
-        const filteredData = data.filter(item =>
-            item.name.toLowerCase().includes(searchTerm)
-        );
-
+        const filteredData = data.filter(item => {
+            let search = item[searchCriteria];
+            if(searchCriteria == 'refs'){
+                console.log(search);
+                for (let i = 0; i < search.length; i++) {
+                        return search[i].full_name.includes(searchTerm);
+                  } 
+            } else {
+                
+                return search.toString().includes(searchTerm);
+            }
+        });
         // Update the table with filtered data
         populateTable(filteredData);
-    });
+    }
+
+    searchInput.addEventListener('input', checkvals);
+    searchCriteriaDrop.addEventListener('change', checkvals);
 });
 </script>
 {% endblock scripts %}

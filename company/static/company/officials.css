@@ -43,11 +43,3 @@ th, td {
         display: none;
     }
 }
-@media (max-width: 768px) {
-    .email {
-        display: none;
-    }
-    .phone{
-        display: none;
-    }
-}
