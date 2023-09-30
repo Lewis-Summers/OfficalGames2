@@ -45,6 +45,7 @@ th, td {
     box-sizing: border-box;
     height: 40px;
     background-color: white;
+    margin-bottom: 5px;
 }
 
 #search-criteria {
@@ -66,4 +67,9 @@ th, td {
     .league, .refs, .field  {
         display: none;
     }
+    .search-container{
+        grid-template-columns: 1fr;
+    }
+
+
 }
