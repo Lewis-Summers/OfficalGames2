@@ -1,0 +1,19 @@
+{% extends 'company/companybase2.html' %}
+{% block title %}Game {{game.id}}{% endblock title %}
+{% load static %}
+{% block style %}<link rel="stylesheet" href="{% static 'company/game.css' %}">{% endblock style %}
+{% block main %}
+    <div id="teams-header">
+        <div class="teams-part">
+            <h1>Team 1</h1>
+        </div>
+        <div class="teams-part">
+            <h1>VS</h1>
+            3 - 1
+        </div>
+        <div class="teams-part">
+            <h1>Team 2</h1>
+        </div>
+    </div>
+{% endblock main %}
+{% block scripts %}{% endblock scripts %}

@@ -1,0 +1,75 @@
+/* Apply these styles to the table and its headers */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px;
+}
+.data-table-container {
+    display: flex;
+    justify-content: center;
+}
+
+th, td {
+    padding: 8px 16px;
+    text-align: left;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+#sport-dropdown {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+/* the search bar and criteria stuff */
+.search-container {
+    text-align: center;
+    width: 100%;
+    margin: 5px auto; /* Center the container horizontally */
+    display: grid;
+    grid-template-columns: 1fr 3fr; /* Adjusted the column widths */
+}
+
+#search-bar, #search-criteria {
+    width: 100%; /* You can adjust this width as needed */
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+    height: 40px;
+    background-color: white;
+    margin-bottom: 5px;
+}
+
+#search-criteria {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+#search-bar {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* Media query for screens smaller than a certain width (e.g., 768px) */
+@media (max-width: 768px) {
+    .league, .refs, .field  {
+        display: none;
+    }
+    .search-container{
+        grid-template-columns: 1fr;
+    }
+
+
+}

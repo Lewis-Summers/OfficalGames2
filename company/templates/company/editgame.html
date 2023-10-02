@@ -1,0 +1,174 @@
+{% extends 'company/companybase2.html' %}
+{% load static %}
+{% block title %}Edit Game {{game.id}}{% endblock title %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'company/editgame.css' %}">
+{% endblock style %}
+{% block main %}
+<div id="edit-header">
+    <h1>Edit Game <span id="game-id-header">324</span></h1>
+</div>
+<form method="post">
+<div id="game-content">
+    <div class="grid-box">
+        <div id="game-details">
+            <div id="game-details-grid">
+                <label for="sport">Sport: </label>
+                <select id="sport-select" name="league">
+                    <option disabled selected>Pick your sport</option>
+                    {% for sport in sports %}
+                        <option value="{{sport.id}}">{{sport.name}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="league">League: </label>
+                <select id="league" name="league">
+                    
+                </select>
+
+                <label for="hteam">Home Team: </label>
+                <input id="hteam" name="hteam" list="hteam-datalist">
+                <datalist id="hteam-datalist">
+                    
+                </datalist>
+
+                <label for="ateam">Away Team: </label>
+                <input id="ateam" name="ateam" list="ateam-datalist">
+                <datalist id="ateam-datalist">
+                    <option value="Team 1">
+                    <option value="Team 2">
+                </datalist>
+
+                <label for="game-number">Game Number: </label>
+                <input oninput="updateGameIdHeader()" type="text" id="game-number" name="game-number" value="324" contenteditable="true">
+                
+                <label for="age-group">Age Group: </label>
+                <select id="age-group" name="age-group">
+                    <option value="U12">U12</option>
+                    <option value="U14">U14</option>
+                </select>
+                
+                <label for="gender">Gender: </label>
+                <select id="gender" name="gender">
+                    <option value="C">Coed</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+                
+                <label for="complex">Complex: </label>
+                <select id="complex" name="complex">
+                    <option value="1">Complex 1</option>
+                    <option value="2">Complex 2</option>
+                    <option value="3">Complex 3</option>
+                </select>
+                <label for="feild">Feild: </label>
+                <select id="feild" name="feild">
+                    <option value="1">Feild 1</option>
+                    <option value="2">Feild 2</option>
+                    <option value="3">Feild 3</option>
+                </select>
+
+                <label for="date">Date: </label>
+                <input type="date" name="date">
+
+                <label for="time">Time: </label> 
+                <input type="time" name="time">
+
+                <label for="pay">Specific Pay</label>
+                <input type="text" name="pay">
+            </div>
+        </div>
+    </div>
+
+    <div id="refs" class="grid-box">
+        <div class="data-table-container"> 
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Official</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody id='tbody'>
+                    <datalist id="ref-input-datalist">
+                        <option data-id='1' value="Team 1">
+                        <option data-id='1' value="Team 2">
+                    </datalist>
+                    <tr>
+                        <td>
+                            <button onclick="nothingyet()">Remove</button>
+                        </td>
+                        <td>
+                            <input id="ref-input" name="hteam2" list="ref-input-datalist">
+                        </td>
+                    
+                        <td>
+                            <select id="role-select" name="role">
+                                <option value="1">Center</option>
+                                <option value="2">AR 1</option>
+                                <option value="3">AR 2</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="after-game-container">
+    <!-- If game has happened -->
+    <h3>Post Game Notes</h3>
+    <div class="after-game-grid">
+        <div class="after-game">
+            Lewis Summers
+            <textarea class="report" disabled>The game was fine, but it's a fast and intense match. I love chicken, but you're kinda ugly, and that's really not nice. I loved that it was a cool game.</textarea>
+        </div>
+    </div>
+    <!-- end if game has -->
+    <!-- ADMIN -->
+    <h3>Admin Notes</h3>
+    <div class="after-game-grid">
+        <div class="after-game">
+            <textarea class="report">This is the admin note - The game was fine, but it's a fast and intense match. I love chicken, but you're kinda ugly, and that's really not nice. I loved that it was a cool game.</textarea>
+        </div>
+    </div>
+</div>
+</form>
+<button type="submit">Save</button>
+{% endblock main %}
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function updateGameIdHeader() {
+      var gameNumber = document.getElementById("game-number").value;
+      var gameIdHeader = document.getElementById("game-id-header");
+      gameIdHeader.textContent = gameNumber;
+    }
+
+    $(document).ready(function() {
+        // Attach an event listener to the dropdown
+        $('#sport-select').on('change', function() { // Add parentheses () here
+            var selectedOption = $(this).val();
+            // Make an AJAX request to fetch data
+            $.ajax({
+                type: 'GET',
+                url: '/company/fetch/editgame',  // URL of your Django view
+                data: {
+                    id: selectedOption,
+                    companyid: {{companyid}}
+                },
+                success: function(fetcheddata) {
+                    console.log(fetcheddata);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+    
+
+
+  </script>
+{% endblock scripts %}

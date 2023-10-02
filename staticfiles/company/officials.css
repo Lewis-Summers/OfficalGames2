@@ -2,18 +2,24 @@
 table {
     width: 100%;
     border-collapse: collapse;
+    margin: 20px;
+}
+.data-table-container {
+    display: flex;
+    justify-content: center;
 }
 
 th, td {
     padding: 8px 16px;
     text-align: left;
+    text-overflow: ellipsis;
     border-bottom: 1px solid #ddd;
+    padding: 10px;
 }
 
 /* Style the search bar container */
 .search-container {
     text-align: center;
-    padding: 20px;
 }
 
 /* Style the search input */
@@ -26,3 +32,14 @@ th, td {
 }
 
 /* Add any other custom styles you want for your table */
+
+
+/* Media query for screens smaller than a certain width (e.g., 768px) */
+@media (max-width: 768px) {
+    .email {
+        display: none;
+    }
+    .phone{
+        display: none;
+    }
+}

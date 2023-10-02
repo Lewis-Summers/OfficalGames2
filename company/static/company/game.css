@@ -1,0 +1,18 @@
+#teams-header {
+    display: grid;
+    grid-template-columns: 45% 10% 45%;
+    width: 100%;
+    justify-content: center;
+    text-align: center; /* Center the text horizontally */
+    height: 100vh; /* Optional: Adjust the height as needed */
+}
+
+.teams-part {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+.teams-part h1 {
+    margin: 0;
+}

@@ -1,5 +1,6 @@
 from django.db import models
 from user.models import User
+from django.utils import timezone
 
 
 genderChoices = (
@@ -87,8 +88,13 @@ class Game(models.Model):
     away_score = models.IntegerField(null=True)
     date_time = models.DateTimeField(null=True)
     admin_notes = models.TextField(null=True)
-    game_report = models.TextField(null=True)
+    game_report = models.TextField(null=True) # gonna have to move to game assingments
     needs_admin = models.BooleanField(null=True)
+    
+    def happened(self):
+        if self.date_time is not None:
+            return self.date_time <= timezone.now()
+        return False
 
 
 
@@ -112,6 +118,8 @@ class Assignment(models.Model):
     status = models.CharField(max_length=2, choices=CHOICES, default='P')
     paid = models.BooleanField(default=False)
     payApproved = models.BooleanField(default=False)
+    # game report
+    # needs admin review
 
 
 class CompanyMembership(models.Model):

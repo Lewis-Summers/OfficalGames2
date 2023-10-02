@@ -26,6 +26,7 @@ urlpatterns = [
     # admin
     # TODO invite users, send users email invites to join companies
     path('<int:companyid>/admin/games', views.games, name='all games'),
+    path('<int:companyid>/admin/edit/game/<int:gameid>', views.editgame, name='edit game'),
     path('<int:companyid>/admin/officials',  views.officials, name='officials'),
     path('<int:companyid>/admin/payments', views.home, name='payments'),
     path('<int:companyid>/admin/sendemails', views.home, name='send emails'),
@@ -36,5 +37,6 @@ urlpatterns = [
 
 
     # fetch
-    path('fetch/gamesdata', views.fetchgamesdata) 
+    path('fetch/gamesdata', views.fetchgamesdata), # both fetches need some validation of where they came from for cyber security 
+    path('fetch/editgame', views.fetchsportdata) 
 ]
