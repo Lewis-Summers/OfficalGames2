@@ -92,7 +92,7 @@ def gameinfo(request, companyid, gameid):
 @login_required
 def mygames(request): # not done
     games = []
-    user_assignments = Assignment.objects.select_related('game__sport', 'game__field', 'game__league', 'game__home_team', 'game__away_team').filter(user=user)
+    user_assignments = Assignment.objects.select_related('game__sport', 'game__field', 'game__league', 'game__home_team', 'game__away_team').filter(user=request.user)
     user_assignments = user_assignments.prefetch_related('game__assignment_set__user').filter(user=request.user)
     for assignment in user_assignments:
         game = assignment.game
@@ -116,7 +116,51 @@ def mygames(request): # not done
 def selfassign(request, companyid):
     # returns information about open games and lets a user submit a request
     # FORM
-    return
+    if request.method == 'POST':
+        pass
+    company = Company.objects.get(id = companyid)
+    employment = getemployment(request, companyid)
+    sports = Sport.objects.filter(company=company)
+    games = []
+    
+    for sport in sports:
+        games.append([{
+        'id': game.id,
+        "gameid": game.assigned_game_id,
+        "sport": {'val': game.sport.name, 'id': game.sport.id },
+        "age": {'val': game.age.title , 'id':game.age.id },
+        "gender": game.gender,
+        "complex": {'val': game.field.complex.name, 'id': game.field.complex.id},
+        "field": {'val': game.field.name, 'id': game.field.id},
+        "League": {'val': game.league.name, 'id': game.league.id},
+        "Date Time":game.date_time
+    } for game in Game.objects.filter(sport=sport)])
+        
+    print(games)
+    sportCriteriaData = [{
+        'name': sport.name,
+        "id": sport.id,
+        'leagues': [{
+            'name': league.name,
+            'id': league.id,
+        } for league in Leagues.objects.filter(sport=sport)],
+        'ages': [{
+            'name': age.title,
+            'id': age.id
+        } for age in Age.objects.filter(sport=sport)]
+    } for sport in sports]
+
+    complexCriteriaData = [{
+        'name':complex.name,
+        'id':complex.id,
+        "feilds":[{
+            "name": field.name,
+            'id': field.id,
+        }for field in Field.objects.filter(complex=complex)]
+    } for complex in Complex.objects.filter(company=company)]
+
+
+    return render(request, 'company/selfassign.html', {'employment': employment, 'sports': sports, 'complexCriteriaData':complexCriteriaData, 'sportCriteriaData': sportCriteriaData})
 
 @login_required
 def aftergames(request, companyid):
@@ -161,6 +205,7 @@ def games(request, companyid):#doneish
     sports = [sport.name for sport in Sport.objects.filter(company = Company.objects.get(id = companyid))]
     return render(request, "company/games.html", {'employment': employment, 'sports': sports, 'companyid': companyid})
 
+#@login_required
 def fetchgamesdata(request): #doneish
     selected_option = request.GET.get('selected_option')
     companyid2 = request.GET.get('companyid')
@@ -217,21 +262,23 @@ def fetchsportdata(request):# needs hella error handling
     sportid = request.GET.get('id')
     selectedSport = Sport.objects.get(id=sportid, company=company)
     leagues = Leagues.objects.filter(sport=selectedSport)
-    teamsList = []
+    
     leaguesList = []
     for league in leagues:
-        leaguesList.append({"name": league.name, 'id': league.id})
+        teamsList = []
         teamsInLeague = Teams.objects.filter(league=league)
         for team in teamsInLeague:
-            teamsList.append({'name':team.name, 'id': team.id})
+            teamsList.append({'name':team.team_name, 'id': team.id})
+        leaguesList.append({"name": league.name, 'id': league.id, 'teams': teamsList})
     ageList = [{'id': age.id, 'name': age.title} for age in Age.objects.filter(sport=selectedSport)]
     complexList = [{'id': complex.id, 'name': complex.name, 'feilds': [{'name': feild.name, 'id': feild.id} for feild in Field.objects.filter(complex=complex)]} for complex in Complex.objects.filter(company=company)]
     print(complexList)
     payload = {
         'leagues': leaguesList,
-        'teams': teamsList,
         "ages": ageList,
         'complexs': complexList
     }
     return JsonResponse(payload, safe=False)
 
+def selfassignsubmit():
+    pass

@@ -31,7 +31,7 @@ class Sport(models.Model):
 
 class Complex(models.Model):
     name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
+    address = models.CharField(max_length=255) # null true
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
 class Age(models.Model):
@@ -45,7 +45,7 @@ class Leagues(models.Model):
     def payValue(self, assignment):
         game = assignment.game
         age = game.age  # Assuming age information is associated with the home team
-        gender = game.gender  # Assuming gender information is associated with the home team
+        gender = game.gender  # Assuming gsender information is associated with the home team
         # Find the relevant PayScale based on sport, age, and gender
         try:
             pay_scale = PayScale.objects.get(

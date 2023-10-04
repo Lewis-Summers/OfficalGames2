@@ -27,7 +27,7 @@
             </div>
             <ul class="sub-menu">
               <li><a class="link_name" href="#">Dashboard</a></li>
-              <li><a href="#">Self Assign</a></li>
+              <li><a href="{% url 'selfassign' companyid=employment.company.id %}">Self Assign</a></li>
               <li><a href="#">My Games</a></li>
               <li><a href="#">After Games</a></li>
               <li><a href="#">My Availability</a></li>
@@ -89,7 +89,6 @@
       }
       let sidebar = document.querySelector(".sidebar");
       let sidebarBtn = document.querySelector(".bx-menu");
-      console.log(sidebarBtn);
       sidebarBtn.addEventListener("click", ()=>{
         sidebar.classList.toggle("close");
       });

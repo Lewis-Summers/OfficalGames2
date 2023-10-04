@@ -1,0 +1,219 @@
+{% extends 'company/companybase2.html' %}
+{% block title %}Self Assign{% endblock title %}
+{% load static %}
+{% block style %}<link rel="stylesheet" href="{% static 'company/selfassign.css' %}">{% endblock style %}
+{% block main %}
+<div stle="padding: 20px;">
+    <div>
+        <div id="search-criteria-container">
+            <div class='search-criteria'>
+                <label for="sport">Sport: </label>
+                <select id="criteria-sport" name="sport">
+                    <option hidden disabled selected value> Select a Sport </option>
+                    {% for sport in sportCriteriaData %}
+                        <option value="{{sport.id}}">{{sport.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class='search-criteria'>
+                <label for="league">League: </label>
+                <select id="criteria-league" name="league">
+                </select>
+            </div>
+            <div class='search-criteria'>
+                <label for="age-group">Age Group: </label>
+                <select id="criteria-age" name="age-group">
+
+                </select>
+            </div>
+            <div class='search-criteria'>
+                <label for="gender">Gender: </label>
+                <select id="criteria-gender" name="gender">
+                    <option hidden disabled selected value> Select a Gender </option>
+                    <option value="C">Coed</option>
+                    <option value="B">Boys</option>
+                    <option value="G">Girls</option>
+                    <option value="">No Preference</option>
+                </select>
+            </div>
+            <div class='search-criteria'>    
+                <label for="complex">Complex: </label>
+                <select id="criteria-complex" name="complex">
+                    <option hidden disabled selected value> Select a Complex </option>
+                    {% for complex in complexCriteriaData %}
+                    <option value="{{complex.id}}">{{complex.name}}</option>
+                    {% endfor %}
+                    <option value> No Preference </option>
+                </select>
+            </div>
+            <div class='search-criteria' id='field-criteria-container'>
+                <label for="feild">Feild: </label>
+                <select id="criteria-field" name="feild">
+                </select>
+            </div>
+            <div class='search-criteria'>
+                <label for="date">Date: </label>
+                <input type="date" name="date">
+            </div>
+        </div>
+        
+        <div class="data-table-container"> 
+            <table class="data-table">
+                <thead>
+                     <tr>
+                        <th class='id'>Game ID</th>
+                        <th class='league'>League</th>
+                        <th class='complex'>Complex</th>
+                        <th class='field'>Field</th>
+                        <th class='datetime'>Date Time</th>
+                        <th class='refs'>Officals Assigned</th>
+                    </tr>
+                </thead>
+                <tbody id='tbody'>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="test">
+        hi
+    </div>
+</div>
+{% endblock main %}
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    
+document.addEventListener('DOMContentLoaded', () => {
+    const sportCriteriaData = {{ sportCriteriaData|safe }};
+    const complexCriteriaData = {{complexCriteriaData|safe }};
+    let currentCriteria = {
+        sport: undefined,
+        league: undefined,
+        age: undefined,
+        gender: undefined,
+        complex: undefined,
+        field: undefined,
+        date: undefined
+    }
+    const gameData = {{ gameData|safe }}
+
+    // Get references to the select elements
+    const sportSelect = document.getElementById('criteria-sport');
+    const leagueSelect = document.getElementById('criteria-league');
+    const ageSelect = document.getElementById('criteria-age');
+    const genderSelect = document.getElementById('criteria-gender')
+    const complexSelect = document.getElementById('criteria-complex');
+    const fieldSelect = document.getElementById('criteria-field');
+    // Function to populate the leagues select based on the selected sport
+    function populateLeagues() {
+        const selectedSport = sportSelect.value;
+        if (selectedSport){
+            const sportData = sportCriteriaData.find(sport => sport.id === parseInt(selectedSport));
+            leagueSelect.innerHTML = '<option hidden disabled selected value> Select a League </option>';
+            if (sportData && sportData.leagues) {
+                sportData.leagues.forEach(league => {
+                    const option = document.createElement('option');
+                    option.value = league.id;
+                    option.textContent = league.name;
+                    leagueSelect.appendChild(option);
+                });
+            }
+            leagueSelect.innerHTML += '<option value="">No Preference</option>';
+        }
+    }
+    // Function to populate the age groups select based on the selected sport
+    function populateAgeGroups() {
+        const selectedSport = sportSelect.value;
+        if (selectedSport) {
+            const sportData = sportCriteriaData.find(sport => sport.id === parseInt(selectedSport));
+            ageSelect.innerHTML = '<option hidden disabled selected value> Select a Age Group</option>';
+            const ageGroups = sportData.ages
+            ageGroups.forEach(ageGroup => {
+                const option = document.createElement('option');
+                option.value = ageGroup.id;
+                option.textContent = ageGroup.name;
+                ageSelect.appendChild(option);
+            });
+            ageSelect.innerHTML += '<option value="">No Preference</option>';
+        }
+    }
+    // Function to populate the fields select based on the selected complex
+    function populateFields() {
+        const selectedComplex = complexSelect.value;
+        if (selectedComplex){
+            const complexData = complexCriteriaData.find(complex => complex.id === parseInt(selectedComplex));
+            fieldSelect.innerHTML = '<option hidden disabled selected value> Select a Field</option>';
+            complexData.feilds.forEach(field => {
+                const option = document.createElement('option');
+                option.value = field.id;
+                option.textContent = field.name;
+                fieldSelect.appendChild(option);
+            });
+            fieldSelect.innerHTML += '<option value="">No Preference</option>';
+        }
+    }
+    function populateTable(data) {
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        data.forEach(game => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+            <td class='id'><a href="/company/{{companyid}}/info/game/${game.id}">${game.assid}</td>
+            <td class='league'>${game.league}</td>
+            <td class='complex'>${game.complex}</td>
+            <td class='field'>${game.field}</td>
+            <td class='datetime'>${game.datetime}</td>
+            <td class='refs'>
+                ${game.refs.map(ref => `${ref.role} - ${ref.full_name}`).join('<br>')}
+            </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+    function checkvals() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const searchCriteria = searchCriteriaDrop.value;
+        // Filter the data based on the search term
+        const filteredData = data.filter(item => {
+            let search = item[searchCriteria];
+            if(searchCriteria == 'refs'){
+                console.log(search);
+                for (let i = 0; i < search.length; i++) {
+                        return search[i].full_name.includes(searchTerm);
+                  } 
+            } else {
+
+                return search.toString().includes(searchTerm);
+            }
+        });
+        // Update the table with filtered data
+        populateTable(filteredData);
+    }
+
+    function ifNull(string, numOutput=true){
+        if (string === ''){
+            return undefined;
+        };
+        if (numOutput){
+            return parseInt(string);
+        };
+        return string;
+
+    }
+
+    sportSelect.addEventListener('change', populateLeagues);
+    sportSelect.addEventListener('change', populateAgeGroups);
+    complexSelect.addEventListener('change', populateFields);
+
+    // event listerns to update the currentCriteria 
+    sportSelect.addEventListener('change', () => { currentCriteria.sport = ifNull(sportSelect.value); console.log(currentCriteria); });
+    leagueSelect.addEventListener('change', () => { currentCriteria.league = ifNull(leagueSelect.value); console.log(currentCriteria); });
+    ageSelect.addEventListener('change', () => { currentCriteria.age = ifNull(ageSelect.value); console.log(currentCriteria);});
+    genderSelect.addEventListener('change', () => {currentCriteria.gender = ifNull(genderSelect.value, numOutput=false); console.log(currentCriteria);})
+    complexSelect.addEventListener('change', () => { currentCriteria.complex = ifNull(complexSelect.value); console.log(currentCriteria); });
+    fieldSelect.addEventListener('change', () => { currentCriteria.field = ifNull(fieldSelect.value); console.log(currentCriteria); });
+});
+// Initial population of leagues and age groups based on the default selected sport
+</script>
+{% endblock scripts %}

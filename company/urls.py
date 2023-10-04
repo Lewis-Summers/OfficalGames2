@@ -19,7 +19,7 @@ urlpatterns = [
     path('<int:companyid>/userdash/', views.home),
     path('<int:companyid>/userdash/estpay', views.home),
     path('<int:companyid>/userdash/games/mygames', views.mygames),
-    path('<int:companyid>/userdash/games/selfassign', views.selfassign),
+    path('<int:companyid>/userdash/games/selfassign', views.selfassign, name="selfassign"),
     path('<int:companyid>/userdash/games/aftergames', views.aftergames),
     path('<int:companyid>/userdash/games/aftergame/<int:gameid>', views.aftergame),
 

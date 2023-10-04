@@ -140,10 +140,38 @@
 {% block scripts %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    const leagueSelect = document.getElementById('league');
+    const hteamSelect = document.getElementById('hteam');
+    const ateamSelect = document.getElementById('ateam');
+    const ageSelect = document.getElementById('age-group');
+    const complexSelect = document.getElementById('complex');
+    const feildSelect = document.getElementById('feild');
+    let data;
+
     function updateGameIdHeader() {
       var gameNumber = document.getElementById("game-number").value;
-      var gameIdHeader = document.getElementById("game-id-header");
+      var gameIdHeader = document.getElementById("game-id-header"); 
       gameIdHeader.textContent = gameNumber;
+    }
+
+    function updateHighLevelData(data) {
+        let leagueSelectString = `<option value="" selected disabled>Pick A League</option>`;
+        
+        data.leagues.forEach(function(league){
+            leagueSelectString = leagueSelectString.concat(
+                `<option value="${league.id}">${league.name}</option>`
+            );
+        });
+        leagueSelect.innerHTML = leagueSelectString;
+
+        let complexSelectString = `<option value="None" selected disabled>Pick A Complex</option>`;
+        
+        data.complexs.forEach(function(complex){
+            complexSelectString = complexSelectString.concat(
+                `<option value="${complex.id}">${complex.name}</option>`
+            );
+        });
+        complexSelect.innerHTML = complexSelectString;
     }
 
     $(document).ready(function() {
@@ -160,12 +188,26 @@
                 },
                 success: function(fetcheddata) {
                     console.log(fetcheddata);
+                    updateHighLevelData(fetcheddata);
+                    data=fetcheddata;
                 },
                 error: function(error) {
                     console.log(error);
                 }
             });
         });
+    });
+
+    leagueSelect.addEventListener('change', function (){
+        const league = data.leagues.find(league => league.id === leagueId);
+        let teamSelectString = ``
+        league.teams.forEach(function(team){
+            teamSelectString = teamSelectString.concat(
+                `<option value="${team.id}">${team.name}</option>`
+            );
+        });
+        hteamSelect.innerHTML = teamSelectString;
+        ateamSelect.innerHTML = teamSelectString;
     });
     
 
