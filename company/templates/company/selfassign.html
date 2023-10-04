@@ -105,9 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gender: 'C',
         complex: {val: "complex1", id: 1},
         field: {val: 'feild1', id: 2},
-        League: {val: 'pasa47', id: 1},
+        league: {val: 'pasa47', id: 1},
         dateTime:'3/3/2023'
     }]
+    const tableBody = document.getElementById('tbody')
     // Get references to the select elements
     const sportSelect = document.getElementById('criteria-sport');
     const leagueSelect = document.getElementById('criteria-league');
@@ -174,24 +175,24 @@ document.addEventListener('DOMContentLoaded', () => {
             <td class='complex'>${game.complex.name}</td>
             <td class='field'>${game.field.name}</td>
             <td class='datetime'>${game.dateTime}</td>
-            <td class='refs'>
-                ${game.refs.map(ref => `${ref.role} - ${ref.full_name}`).join('<br>')}
-            </td>
+            
             `;
             tableBody.appendChild(row);
         });
     }
     function filterGamesByCriteria() {
       populateTable(gameData.filter((game) => {
-        return (
-          (currentCriteria.sport === undefined || game.sport.id === currentCriteria.sport) &&
+        if ((currentCriteria.sport === undefined || game.sport.id === currentCriteria.sport) &&
           (currentCriteria.league === undefined || game.League.id === currentCriteria.league) &&
           (currentCriteria.age === undefined || game.age.id === currentCriteria.age) &&
           (currentCriteria.gender === undefined || game.gender === currentCriteria.gender) &&
           (currentCriteria.complex === undefined || game.complex.id === currentCriteria.complex) &&
           (currentCriteria.field === undefined || game.field.id === currentCriteria.field) &&
           (currentCriteria.date === undefined || game.dateTime === currentCriteria.date)
-        );
+        ){
+            return game
+        }
+
       }));
     }
     function checkvals() {
@@ -215,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function ifNull(string, numOutput=true){
+
         if (string === ''){
             return undefined;
         };
@@ -230,12 +232,12 @@ document.addEventListener('DOMContentLoaded', () => {
     complexSelect.addEventListener('change', populateFields);
 
     // event listerns to update the currentCriteria 
-    sportSelect.addEventListener('change', () => { currentCriteria.sport = ifNull(sportSelect.value); console.log(currentCriteria); });
-    leagueSelect.addEventListener('change', () => { currentCriteria.league = ifNull(leagueSelect.value); console.log(currentCriteria); });
-    ageSelect.addEventListener('change', () => { currentCriteria.age = ifNull(ageSelect.value); console.log(currentCriteria);});
-    genderSelect.addEventListener('change', () => {currentCriteria.gender = ifNull(genderSelect.value, numOutput=false); console.log(currentCriteria);})
-    complexSelect.addEventListener('change', () => { currentCriteria.complex = ifNull(complexSelect.value); console.log(currentCriteria); });
-    fieldSelect.addEventListener('change', () => { currentCriteria.field = ifNull(fieldSelect.value); console.log(currentCriteria); });
+    sportSelect.addEventListener('change', () => { currentCriteria.sport = ifNull(sportSelect.value); console.log(currentCriteria); filterGamesByCriteria();});
+    leagueSelect.addEventListener('change', () => { currentCriteria.league = ifNull(leagueSelect.value); console.log(currentCriteria);  filterGamesByCriteria();});
+    ageSelect.addEventListener('change', () => { currentCriteria.age = ifNull(ageSelect.value); console.log(currentCriteria);  filterGamesByCriteria();});
+    genderSelect.addEventListener('change', () => {currentCriteria.gender = ifNull(genderSelect.value, numOutput=false); console.log(currentCriteria);  filterGamesByCriteria();})
+    complexSelect.addEventListener('change', () => { currentCriteria.complex = ifNull(complexSelect.value); console.log(currentCriteria);  filterGamesByCriteria();});
+    fieldSelect.addEventListener('change', () => { currentCriteria.field = ifNull(fieldSelect.value); console.log(currentCriteria);  filterGamesByCriteria();});
 });
 // Initial population of leagues and age groups based on the default selected sport
 </script>

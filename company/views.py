@@ -128,12 +128,12 @@ def selfassign(request, companyid):
         'id': game.id,
         "gameid": game.assigned_game_id,
         "sport": {'val': game.sport.name, 'id': game.sport.id },
-        "age": {'val': game.age.title , 'id':game.age.id },
-        "gender": game.gender,
-        "complex": {'val': game.field.complex.name, 'id': game.field.complex.id},
-        "field": {'val': game.field.name, 'id': game.field.id},
-        "League": {'val': game.league.name, 'id': game.league.id},
-        "Date Time":game.date_time
+        "age": {'val': game.age.title if game.age else '--' , 'id':game.age.id if game.age else '--' },
+        "gender": game.gender if game.gender else '--',
+        "complex": {'val': game.field.complex.name if game.field else '--', 'id': game.field.complex.id if game.field else '--'},
+        "field": {'val': game.field.name if game.field else '--', 'id': game.field.id if game.field else '--'},
+        "League": {'val': game.league.name if game.league else '--', 'id': game.league.id if game.league else '--'},
+        "dateTime":game.date_time if game.date_time else '--'
     } for game in Game.objects.filter(sport=sport)])
         
     print(games)
