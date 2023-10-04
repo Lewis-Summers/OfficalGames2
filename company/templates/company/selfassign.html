@@ -96,8 +96,18 @@ document.addEventListener('DOMContentLoaded', () => {
         field: undefined,
         date: undefined
     }
-    const gameData = {{ gameData|safe }}
-
+    // const gameData = {{ gameData|safe }}
+    let gameData = [{
+        id: 1,
+        gameid: 421,
+        sport: {val: "soccer", id: 1 },
+        age: {val: 'U12' , id:1 },
+        gender: 'C',
+        complex: {val: "complex1", id: 1},
+        field: {val: 'feild1', id: 2},
+        League: {val: 'pasa47', id: 1},
+        dateTime:'3/3/2023'
+    }]
     // Get references to the select elements
     const sportSelect = document.getElementById('criteria-sport');
     const leagueSelect = document.getElementById('criteria-league');
@@ -160,16 +170,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = document.createElement('tr');
             row.innerHTML = `
             <td class='id'><a href="/company/{{companyid}}/info/game/${game.id}">${game.assid}</td>
-            <td class='league'>${game.league}</td>
-            <td class='complex'>${game.complex}</td>
-            <td class='field'>${game.field}</td>
-            <td class='datetime'>${game.datetime}</td>
+            <td class='league'>${game.league.name}</td>
+            <td class='complex'>${game.complex.name}</td>
+            <td class='field'>${game.field.name}</td>
+            <td class='datetime'>${game.dateTime}</td>
             <td class='refs'>
                 ${game.refs.map(ref => `${ref.role} - ${ref.full_name}`).join('<br>')}
             </td>
             `;
             tableBody.appendChild(row);
         });
+    }
+    function filterGamesByCriteria() {
+      populateTable(gameData.filter((game) => {
+        return (
+          (currentCriteria.sport === undefined || game.sport.id === currentCriteria.sport) &&
+          (currentCriteria.league === undefined || game.League.id === currentCriteria.league) &&
+          (currentCriteria.age === undefined || game.age.id === currentCriteria.age) &&
+          (currentCriteria.gender === undefined || game.gender === currentCriteria.gender) &&
+          (currentCriteria.complex === undefined || game.complex.id === currentCriteria.complex) &&
+          (currentCriteria.field === undefined || game.field.id === currentCriteria.field) &&
+          (currentCriteria.date === undefined || game.dateTime === currentCriteria.date)
+        );
+      }));
     }
     function checkvals() {
         const searchTerm = searchInput.value.toLowerCase();
