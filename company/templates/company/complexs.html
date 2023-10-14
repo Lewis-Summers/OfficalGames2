@@ -7,7 +7,7 @@
 {% block main %}
 <div style="padding: 20px;">
     <h1>Complexes</h1>
-        <div><!-- Needs an add game feature -->
+        <div>
             <div class="search-container">
                 <span>
                     <input type="text" id="search-bar" placeholder="Search Complexes...">
@@ -70,7 +70,6 @@
     }
     populateTable(data);
     searchInput.addEventListener('input', checkvals);
-    searchCriteriaDrop.addEventListener('change', checkvals);
 });
 </script>
 {% endblock scripts %}

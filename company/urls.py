@@ -7,7 +7,7 @@ urlpatterns = [
     #info
     path('<int:companyid>/info/officials/official/<int:id>',  views.official, name='offical'),
     path('<int:companyid>/info/leagues',  views.leagues, name='leagues'),
-    path('<int:companyid>/info/leagues/league/<int:id>',  views.league, name='league'),
+    path('<int:companyid>/info/leagues/<int:id>',  views.league, name='league'),
     path('<int:companyid>/info/complexs', views.complexs, name='complexs'),
     path('<int:companyid>/info/complexs/<int:complexid>', views.complex, name='complex'),
     path('<int:companyid>/info/complexs/complex/<int:complexid>/feild/<int:feildid>', views.feild, name='feild'),

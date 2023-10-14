@@ -88,8 +88,13 @@ def official(request, companyid, id):
 
 @login_required
 def leagues(request, companyid):
-    # returns a list of leagues
-    return
+    employment = getemployment(request, companyid)
+    leagues = list(Leagues.objects.filter(sport__company__id=companyid).values('id', 'name', 'sport__name', 'sport_id'))
+    sports = list(Sport.objects.filter(company__id=companyid))
+    print(leagues)
+    return render(request, "company/leagues.html", {'employment': employment,
+                                                    'sports': sports,
+                                                    'leagues': leagues})
 
 @login_required
 def league(request, companyid, id):

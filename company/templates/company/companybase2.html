@@ -46,7 +46,7 @@
               <li><a class="link_name" href="#">Company Info</a></li>
               <li><a href="#">Announcements</a></li>
               <li><a href="{% url 'complexs' companyid=employment.company.id %}">Complexs</a></li>
-              <li><a href="#">Leagues</a></li>
+              <li><a href="{% url 'leagues' companyid=employment.company.id %}">Leagues</a></li>
               <li><a href="#">Game Pay</a></li>
               <li><a href="#">Contact</a></li>
             </ul>
