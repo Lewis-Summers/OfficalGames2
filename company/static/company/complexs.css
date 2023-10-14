@@ -17,27 +17,15 @@ th, td {
     padding: 10px;
 }
 
-#sport-dropdown {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: white;
-    margin-top: 16px;
-    margin-bottom: 16px;
-}
 
 /* the search bar and criteria stuff */
 .search-container {
     text-align: center;
     width: 100%;
     margin: 5px auto; /* Center the container horizontally */
-    display: grid;
-    grid-template-columns: 1fr 3fr; /* Adjusted the column widths */
 }
 
-#search-bar, #search-criteria {
+#search-bar {
     width: 100%; /* You can adjust this width as needed */
     padding: 10px;
     border: 1px solid #ccc;
@@ -46,20 +34,7 @@ th, td {
     height: 40px;
     background-color: white;
     margin-bottom: 5px;
-}
-
-#search-criteria-dropdown {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-#search-bar {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 5px;
 }
 
 /* Media query for screens smaller than a certain width (e.g., 768px) */

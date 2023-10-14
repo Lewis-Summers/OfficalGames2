@@ -8,8 +8,8 @@ urlpatterns = [
     path('<int:companyid>/info/officials/official/<int:id>',  views.official, name='offical'),
     path('<int:companyid>/info/leagues',  views.leagues, name='leagues'),
     path('<int:companyid>/info/leagues/league/<int:id>',  views.league, name='league'),
-    path('<int:companyid>/info/complexs', views.complexs, name='complex'),
-    path('<int:companyid>/info/complexs/complex/<int:complexid>', views.complex, name='complex'),
+    path('<int:companyid>/info/complexs', views.complexs, name='complexs'),
+    path('<int:companyid>/info/complexs/<int:complexid>', views.complex, name='complex'),
     path('<int:companyid>/info/complexs/complex/<int:complexid>/feild/<int:feildid>', views.feild, name='feild'),
     path('<int:companyid>/info/game/<int:gameid>', views.gameinfo, name="game"), # this is right we wont have a all games page we just have a game look up type thing here
     path('<int:companyid>/info/gamepay', views.payscales, name="gamepay"),
@@ -25,7 +25,7 @@ urlpatterns = [
 
     # admin
     # TODO invite users, send users email invites to join companies
-    path('<int:companyid>/admin/games', views.games, name='all games'),
+    path('<int:companyid>/admin/games', views.games2, name='all games'),
     path('<int:companyid>/admin/edit/game/<int:gameid>', views.editgame, name='edit game'),
     path('<int:companyid>/admin/officials',  views.officials, name='officials'),
     path('<int:companyid>/admin/payments', views.home, name='payments'),

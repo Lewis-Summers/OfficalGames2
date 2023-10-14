@@ -30,15 +30,20 @@ th, td {
     margin-bottom: 16px;
 }
 
-#search-criteria-container-center{
+#search-criteria-container-center, #search-criteria-container-holder{
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#search-criteria-container{
+#search-criteria-container-holder{
+    width:90%;
     border-style: solid;
     border-color: black;
     border-width: 1px;
+    display: flex;
+    flex-direction: column;
+}
+#search-criteria-container{
     display: grid;
     grid-template-columns: 1fr 1fr;
     width:90%;
@@ -92,13 +97,47 @@ th, td {
 }
 
 
-
 .info-label {
     font-weight: bold;
 }
 
 .info-value {
     margin-bottom: 10px;
+}
+
+.search-container {
+    text-align: center;
+    width: 90%;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 5px auto; /* Center the container horizontally */
+    display: grid;
+    grid-template-columns: 1fr 3fr; /* Adjusted the column widths */
+}
+
+#search-bar, #search-criteria-dropdown {
+    width: 100%; /* You can adjust this width as needed */
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+    height: 40px;
+    background-color: white;
+    margin-bottom: 5px;
+}
+
+#search-criteria-dropdown {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+#search-bar {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 @media screen and (max-width: 500px) {

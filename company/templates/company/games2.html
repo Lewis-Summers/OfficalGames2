@@ -1,65 +1,78 @@
 {% extends 'company/companybase2.html' %}
 {% block title %}Self Assign{% endblock title %}
 {% load static %}
-{% block style %}<link rel="stylesheet" href="{% static 'company/selfassign.css' %}">{% endblock style %}
+{% block style %}<link rel="stylesheet" href="{% static 'company/games2.css' %}">{% endblock style %}
 {% block main %}
 <div>
     <div id="search-criteria-container-center">
-        <div id="search-criteria-container">
-            <div class='search-criteria'>
-                <label for="sport">Sport: </label>
-                <select id="criteria-sport" name="sport">
-                    <option hidden disabled selected value> Select a Sport </option>
-                    {% for sport in sportCriteriaData %}
-                        <option value="{{sport.id}}">{{sport.name}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class='search-criteria'>
-                <label for="league">League: </label>
-                <select id="criteria-league" name="league">
-                </select>
-            </div>
-            <div class='search-criteria'>
-                <label for="age-group">Age Group: </label>
-                <select id="criteria-age" name="age-group">
+        <div id="search-criteria-container-holder">
+            <div id="search-criteria-container">
+                <div class='search-criteria'>
+                    <label for="sport">Sport: </label>
+                    <select id="criteria-sport" name="sport">
+                        <option hidden disabled selected value> Select a Sport </option>
+                        {% for sport in sportCriteriaData %}
+                            <option value="{{sport.id}}">{{sport.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class='search-criteria'>
+                    <label for="league">League: </label>
+                    <select id="criteria-league" name="league">
+                    </select>
+                </div>
+                <div class='search-criteria'>
+                    <label for="age-group">Age Group: </label>
+                    <select id="criteria-age" name="age-group">
 
-                </select>
+                    </select>
+                </div>
+                <div class='search-criteria'>
+                    <label for="gender">Gender: </label>
+                    <select id="criteria-gender" name="gender">
+                        <option hidden disabled selected value> Select a Gender </option>
+                        <option value="C">Coed</option>
+                        <option value="B">Boys</option>
+                        <option value="G">Girls</option>
+                        <option value="">No Preference</option>
+                    </select>
+                </div>
+                <div class='search-criteria'>    
+                    <label for="complex">Complex: </label>
+                    <select id="criteria-complex" name="complex">
+                        <option hidden disabled selected value> Select a Complex </option>
+                        {% for complex in complexCriteriaData %}
+                        <option value="{{complex.id}}">{{complex.name}}</option>
+                        {% endfor %}
+                        <option value> No Preference </option>
+                    </select>
+                </div>
+                <div class='search-criteria' id='field-criteria-container'>
+                    <label for="feild">Feild: </label>
+                    <select id="criteria-field" name="feild">
+                    </select>
+                </div>
+                <div class='search-criteria'>
+                    <label for="sdate">Start Date: </label>
+                    <input id='criteria-start-date' type="date" name="sdate">
+                </div>
+                <div class='search-criteria'>
+                    <label for="edate">End Date: </label>
+                    <input id='criteria-end-date' type="date" name="edate">
+                </div>
             </div>
-            <div class='search-criteria'>
-                <label for="gender">Gender: </label>
-                <select id="criteria-gender" name="gender">
-                    <option hidden disabled selected value> Select a Gender </option>
-                    <option value="C">Coed</option>
-                    <option value="B">Boys</option>
-                    <option value="G">Girls</option>
-                    <option value="">No Preference</option>
-                </select>
+            <div class="search-container">
+                <div class="dropdown">
+                    <select id="search-criteria-dropdown">
+                        <option value="gameid">Game ID</option>
+                        <option value="refs">Officals Assigned</option>
+                    </select>
+                </div>
+                <span>
+                    <input type="text" id="search-bar" placeholder="Search...">
+                </span>
             </div>
-            <div class='search-criteria'>    
-                <label for="complex">Complex: </label>
-                <select id="criteria-complex" name="complex">
-                    <option hidden disabled selected value> Select a Complex </option>
-                    {% for complex in complexCriteriaData %}
-                    <option value="{{complex.id}}">{{complex.name}}</option>
-                    {% endfor %}
-                    <option value> No Preference </option>
-                </select>
-            </div>
-            <div class='search-criteria' id='field-criteria-container'>
-                <label for="feild">Feild: </label>
-                <select id="criteria-field" name="feild">
-                </select>
-            </div>
-            <div class='search-criteria'>
-                <label for="sdate">Start Date: </label>
-                <input id='criteria-start-date' type="date" name="sdate">
-            </div>
-            <div class='search-criteria'>
-                <label for="edate">End Date: </label>
-                <input id='criteria-end-date' type="date" name="edate">
-            </div>
-        </div>
+        </div>       
     </div>
     <div class='game-data-container'>
         <div class="data-table-container"> 
@@ -108,9 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     let gameData = {{ gameData|safe }}
     console.log(gameData);
-    const tableBody = document.getElementById('tbody')
-    const cardBody = document.getElementById('game-cards')
+    const tableBody = document.getElementById('tbody');
+    const cardBody = document.getElementById('game-cards');
     // Get references to the select elements
+    const searchInput = document.getElementById('search-bar');
+    const searchCriteriaDrop = document.getElementById('search-criteria-dropdown');
     const sportSelect = document.getElementById('criteria-sport');
     const leagueSelect = document.getElementById('criteria-league');
     const ageSelect = document.getElementById('criteria-age');
@@ -174,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data.forEach(game => {
             const row = document.createElement('tr');
             row.innerHTML = `
-            <td class='id'><a href="/company/{{companyid}}/info/game/${game.id}">${game.gameid}</a></td>
+            <td class='id'><a href="/company/{{employment.company.id}}/info/game/${game.id}">${game.gameid}</a></td>
             <td class='league'>${game.league.val}</td>
             <td class='complex'>${game.complex.val}</td>
             <td class='field'>${game.field.val}</td>
@@ -246,12 +261,33 @@ document.addEventListener('DOMContentLoaded', () => {
                    date1.getMonth() === date2.getMonth() &&
                    date1.getDate() === date2.getDate();
         }
+        const searchTerm = searchInput.value.toLowerCase();
+        const searchCriteria = searchCriteriaDrop.value;
+        // Filter the data based on the search term
+        let filteredGameData = gameData; 
+        console.log(searchTerm)
+        if (searchTerm){
+            const filteredData = gameData.filter(item => {
+                console.log(searchTerm)
+                let search = item[searchCriteria];
+                console.log(searchTerm)
+                if(searchCriteria == 'refs'){
+                    console.log(search);
+                    for (let i = 0; i < search.length; i++) {
+                        return search[i].name.includes(searchTerm);
+                    } 
+                } else {
+                    return search.toString().includes(searchTerm);
+                }
+            });
+            filteredGameData = filteredData;
+        }
         // const startDate = new Date(startDateSelect.val)
         // const endDate = new Date(endDateSelect.val)
 
         const startDate = currentCriteria.sdate ? new Date( currentCriteria.sdate) : undefined;
         const endDate =  currentCriteria.edate ? new Date( currentCriteria.edate) : undefined;
-        populateTable(gameData.filter((game) => {
+        populateTable(filteredGameData.filter((game) => {
           if ((currentCriteria.sport === undefined || game.sport.id === currentCriteria.sport) &&
             (currentCriteria.league === undefined || game.league.id === currentCriteria.league) &&
             (currentCriteria.age === undefined || game.age.id === currentCriteria.age) &&
@@ -260,38 +296,15 @@ document.addEventListener('DOMContentLoaded', () => {
             (currentCriteria.field === undefined || game.field.id === currentCriteria.field)
           ){
             let gameDate = new Date(game.date)
-            game
-            console.log(gameDate)
-
-
             if ((startDate === undefined || datesAreEqual(gameDate, startDate)) &&
                 (endDate === undefined || datesAreEqual(gameDate, endDate))) {
-                return game
+                return game;
             } else if ((startDate === undefined || gameDate >= startDate) &&
                 (endDate === undefined || gameDate <= endDate)) {
-                return game
+                return game;
             }
           }
         }));
-    }
-    function checkvals() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const searchCriteria = searchCriteriaDrop.value;
-        // Filter the data based on the search term
-        const filteredData = data.filter(item => {
-            let search = item[searchCriteria];
-            if(searchCriteria == 'refs'){
-                console.log(search);
-                for (let i = 0; i < search.length; i++) {
-                        return search[i].full_name.includes(searchTerm);
-                  } 
-            } else {
-
-                return search.toString().includes(searchTerm);
-            }
-        });
-        // Update the table with filtered data
-        populateTable(filteredData);
     }
 
     function ifNull(string, numOutput=true){
@@ -312,6 +325,8 @@ document.addEventListener('DOMContentLoaded', () => {
     complexSelect.addEventListener('change', populateFields);
 
     // event listerns to update the currentCriteria 
+    searchInput.addEventListener('input', filterGamesByCriteria);
+    searchCriteriaDrop.addEventListener('change', filterGamesByCriteria);
     sportSelect.addEventListener('change', () => { currentCriteria.sport = ifNull(sportSelect.value); console.log(currentCriteria); filterGamesByCriteria();});
     leagueSelect.addEventListener('change', () => { currentCriteria.league = ifNull(leagueSelect.value); console.log(currentCriteria);  filterGamesByCriteria();});
     ageSelect.addEventListener('change', () => { currentCriteria.age = ifNull(ageSelect.value); console.log(currentCriteria);  filterGamesByCriteria();});

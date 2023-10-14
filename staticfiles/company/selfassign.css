@@ -1,0 +1,100 @@
+/* Apply these styles to the table and its headers */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.data-table{
+    margin: 20px;
+}
+.data-table-container {
+    display: flex;
+    justify-content: center;
+}
+
+th, td {
+    padding: 8px 16px;
+    text-align: left;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+#sport-dropdown {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+#search-criteria-container-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#search-criteria-container{
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width:90%;
+    gap: 10px;
+    padding: 10px;
+}
+
+.search-criteria{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    width: 100%;
+}
+.search-criteria label{
+    font-weight: bold;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 20px;
+    max-width: 300px;
+    background-color: #ffffff;
+}
+
+.info-label {
+    font-weight: bold;
+}
+
+.info-value {
+    margin-bottom: 10px;
+}
+
+
+@media screen and (max-width: 500px) {
+    #search-criteria-container{
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .league, .refs, .field  {
+        display: none;
+    }
+    .search-container{
+        grid-template-columns: 1fr;
+    }
+    .data-table-container{
+        display: none;
+    }
+    .game-cards-container{
+        display: contents;
+    }
+
+
+
+}

@@ -12,6 +12,62 @@ def getemployment(request, companyid):
     compobj = Company.objects.get(id=companyid)
     return CompanyMembership.objects.get(user = request.user, company=compobj)
 
+def getAllGameInfo(request, companyid, outputDoc):
+    company = Company.objects.get(id = companyid)
+    employment = getemployment(request, companyid)
+    sports = Sport.objects.filter(company=company)
+    games = []
+    
+    for sport in sports:
+        for game in Game.objects.filter(sport=sport):
+            games.append({
+            'id': game.id,
+            "gameid": game.assigned_game_id,
+            "sport": {'val': game.sport.name, 'id': game.sport.id },
+            "age": {'val': game.age.title if game.age else '--' , 'id':game.age.id if game.age else '--' },
+            "gender": game.gender if game.gender else '--',
+            "complex": {'val': game.field.complex.name if game.field else '--', 'id': game.field.complex.id if game.field else '--'},
+            "field": {'val': game.field.name if game.field else '--', 'id': game.field.id if game.field else '--'},
+            "league": {'val': game.league.name if game.league else '--', 'id': game.league.id if game.league else '--'},
+            "date": game.date_time.strftime('%Y-%m-%d') if game.date_time else '--',
+            "dateFormatted":game.date_time.strftime('%B %d(%a) %Y') if game.date_time else '--',
+            "time": game.date_time.strftime('%I:%M %p') if game.date_time else '--',
+            "refs": [{
+                'name': ref.user.get_full_name(),
+                'role': ref.role.name
+            } for ref in Assignment.objects.filter(game=game)]
+            })
+            print(game.date_time)
+
+        
+    sportCriteriaData = [{
+        'name': sport.name,
+        "id": sport.id,
+        'leagues': [{
+            'name': league.name,
+            'id': league.id,
+        } for league in Leagues.objects.filter(sport=sport)],
+        'ages': [{
+            'name': age.title,
+            'id': age.id
+        } for age in Age.objects.filter(sport=sport)]
+    } for sport in sports]
+
+    complexCriteriaData = [{
+        'name':complex.name,
+        'id':complex.id,
+        "feilds":[{
+            "name": field.name,
+            'id': field.id,
+        }for field in Field.objects.filter(complex=complex)]
+    } for complex in Complex.objects.filter(company=company)]
+
+
+    return render(request, outputDoc, {'employment': employment,
+                                       'sports': sports,
+                                       'complexCriteriaData':complexCriteriaData, 
+                                       'sportCriteriaData': sportCriteriaData,
+                                       'gameData': games})
 
 @login_required
 def home(request, companyid):
@@ -42,13 +98,22 @@ def league(request, companyid, id):
 
 @login_required
 def complexs(request, companyid):
-    # returns a list of complexs
-    return HttpResponse(companyid)
+    employment = getemployment(request, companyid)
+    complexes = Complex.objects.filter(company__id=companyid).values('id', 'name', 'address')
+    # Convert the QuerySet to a list of dictionaries
+    complexList = list(complexes)
+    # chat gpt is so smart omg lmao
+    print(complexList)
+    # for complex in complexList:
+    #     complex['address'] = '--' if complex['address'] is None else complex['address']
+    # IDK IF WE NEED THIS CODE IT IS FOR MAKING SURE THERE IS AND ADDR BUT I THINK IT IS GONNA BE REQUIRED TO HAVE AN ADDR FOR A COMPLEX
+    return render(request, "company/complexs.html", {'employment':employment, 'complexsData': complexList})
 
 @login_required
 def complex(request, companyid, complexid):
-    # returns information about a complex including all the feilds
-    return
+    employment = getemployment(request, companyid)
+    return HttpResponse(complexid)
+    return render(request, "company/complexs.html", {'employment':employment})
 
 @login_required
 def feild(request, companyid, complexid, feildid):
@@ -57,11 +122,7 @@ def feild(request, companyid, complexid, feildid):
 
 @login_required
 def gameinfo(request, companyid, gameid):
-    try:
-        company = Company.objects.get(id=companyid)
-    except:
-        return # company does not exist
-    
+    employment = getemployment(request, companyid)
     try:
         game = Game.objects.get(id=gameid)
     except:
@@ -87,7 +148,7 @@ def gameinfo(request, companyid, gameid):
         payload[det]= '--' if payload[det] is None else payload[det]
 
     print(payload)
-    return render(request, "company/game.html", {"game": game, "payload": payload})
+    return render(request, "company/game.html", {"game": game, "payload": payload, 'employment':employment})
 
 @login_required
 def mygames(request): # not done
@@ -118,49 +179,8 @@ def selfassign(request, companyid):
     # FORM
     if request.method == 'POST':
         pass
-    company = Company.objects.get(id = companyid)
-    employment = getemployment(request, companyid)
-    sports = Sport.objects.filter(company=company)
-    games = []
-    
-    for sport in sports:
-        games.append([{
-        'id': game.id,
-        "gameid": game.assigned_game_id,
-        "sport": {'val': game.sport.name, 'id': game.sport.id },
-        "age": {'val': game.age.title if game.age else '--' , 'id':game.age.id if game.age else '--' },
-        "gender": game.gender if game.gender else '--',
-        "complex": {'val': game.field.complex.name if game.field else '--', 'id': game.field.complex.id if game.field else '--'},
-        "field": {'val': game.field.name if game.field else '--', 'id': game.field.id if game.field else '--'},
-        "League": {'val': game.league.name if game.league else '--', 'id': game.league.id if game.league else '--'},
-        "dateTime":game.date_time if game.date_time else '--'
-    } for game in Game.objects.filter(sport=sport)])
-        
-    print(games)
-    sportCriteriaData = [{
-        'name': sport.name,
-        "id": sport.id,
-        'leagues': [{
-            'name': league.name,
-            'id': league.id,
-        } for league in Leagues.objects.filter(sport=sport)],
-        'ages': [{
-            'name': age.title,
-            'id': age.id
-        } for age in Age.objects.filter(sport=sport)]
-    } for sport in sports]
 
-    complexCriteriaData = [{
-        'name':complex.name,
-        'id':complex.id,
-        "feilds":[{
-            "name": field.name,
-            'id': field.id,
-        }for field in Field.objects.filter(complex=complex)]
-    } for complex in Complex.objects.filter(company=company)]
-
-
-    return render(request, 'company/selfassign.html', {'employment': employment, 'sports': sports, 'complexCriteriaData':complexCriteriaData, 'sportCriteriaData': sportCriteriaData})
+    return getAllGameInfo(request, companyid, 'company/selfassign.html')
 
 @login_required
 def aftergames(request, companyid):
@@ -199,14 +219,18 @@ def editgame(request, companyid, gameid):
 
     return render(request, "company/editgame.html", {'employment': employment, 'companyid': companyid, 'game': game, 'sports':sports})
 
-@login_required
+@login_required # DEPERCATED FOR GAMES2
+def games2(request, companyid):#doneish
+    return getAllGameInfo(request, companyid, 'company/games2.html')
+
+@login_required # DEPERCATED FOR GAMES2
 def games(request, companyid):#doneish
     employment = getemployment(request, companyid)
     sports = [sport.name for sport in Sport.objects.filter(company = Company.objects.get(id = companyid))]
     return render(request, "company/games.html", {'employment': employment, 'sports': sports, 'companyid': companyid})
 
 #@login_required
-def fetchgamesdata(request): #doneish
+def fetchgamesdata(request): #doneish # DEPERCATED FOR GAMES2
     selected_option = request.GET.get('selected_option')
     companyid2 = request.GET.get('companyid')
 
