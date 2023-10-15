@@ -3,17 +3,95 @@
 {% load static %}
 {% block style %}<link rel="stylesheet" href="{% static 'company/game.css' %}">{% endblock style %}
 {% block main %}
-    <div id="teams-header">
-        <div class="teams-part">
-            <h1>Team 1</h1>
-        </div>
-        <div class="teams-part">
+<div id="teams-header">
+    <div class="teams-part">
+        <h1>
+            {% if game.home_team.name %}
+                {{game.home_team.name}}
+            {% else %}Home Team{% endif %}
+        </h1>
+    </div>
+    <div class="teams-part">
+        <div class="vs-container">
             <h1>VS</h1>
-            3 - 1
-        </div>
-        <div class="teams-part">
-            <h1>Team 2</h1>
+            <div class="score">
+                {% if game.home_score %}
+                    {{game.home_score}}
+                {% else %}?{% endif %} - {% if game.away_score %}
+                    {{game.away_score}}
+                {% else %}?{% endif %}
+            </div>
         </div>
     </div>
+    <div class="teams-part">
+        <h1>
+            {% if game.away_team.name %}
+                {{game.away_team.name}}
+            {% else %}Away Team{% endif %}
+        </h1>
+    </div>
+</div>
+<div id="game-content">
+    <div class="grid-box">
+        <div id="game-details">
+            <h3>
+                {% if game.league.name %}
+                    {{game.league.name}}
+                {% else %}No Assigned League{% endif %}
+            </h3>
+            <div id="game-details-grid">
+                <label>Game Number: <strong>{{game.assigned_game_id}}</strong></label>
+                <label>Age Group: <strong>{{game.age.title}}</strong></label>
+                <label>Gender: <strong>{{game.get_gender_display}}</strong></label>
+                <label>Location: <strong>{{game.field.complex.name}} - {{game.field.name}}</strong></label>
+                <label>Date: <strong>{{game.date_time.date}}</strong></label>
+                <label>Time: <strong>{{game.date_time.time}}</strong></label>
+            </div>
+        </div>
+    </div>
+
+    <div id="refs" class="grid-box">
+        <div class="data-table-container"> 
+            <table class="data-table">
+                <thead>
+                     <tr>
+                        <th>Official</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody id='tbody'>
+                    <tr>
+                        {% for assignment in assignments %}
+                            <td><a href="/company/{{employment.company.id}}/info/officials/{{assignment.user.id}}">{{assignment.user.get_full_name}}</a></td>
+                            <td>{{assignment.role.name}}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% if employment.isAdmin %}
+    <div id="after-game-container">
+        <!-- If game has happened -->
+        <h3>Post Game Notes</h3>
+        <div class="after-game-grid">
+            {% for assignment in assignments %}
+            {% if assignment.report %}
+            <div class="after-game">
+                {{assignment.user.get_full_name}}
+                <textarea class="report" disabled>{{assignment.report}}</textarea>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <h3>Admin Notes</h3>
+        <div class="after-game-grid">
+            <div class="after-game">
+                <textarea class="report" disabled>{{game.admin_notes}}</textarea>
+            </div>
+        </div>
+    </div>
+{% endif %}
 {% endblock main %}
 {% block scripts %}{% endblock scripts %}

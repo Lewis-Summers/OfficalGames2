@@ -4,15 +4,91 @@
     width: 100%;
     justify-content: center;
     text-align: center; /* Center the text horizontally */
-    height: 100vh; /* Optional: Adjust the height as needed */
 }
 
 .teams-part {
-    font-family: 'Poppins', sans-serif;
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Stack team name and school information vertically */
 }
 
 .teams-part h1 {
     margin: 0;
+}
+
+.school {
+    font-size: 14px; /* Style the school information */
+    color: #000000; /* Adjust the color as needed */
+}
+
+.vs-container {
+    display: flex;
+    flex-direction: column; /* Stack "VS" and the score vertically */
+    align-items: center; /* Center content horizontally */
+}
+
+.score {
+    font-size: 24px; /* Style the score */
+    font-weight: bold; /* Make it bold if needed */
+    color: #000000; /* Adjust the color as needed */
+    margin-top: 5px; /* Add spacing between "VS" and the score */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.data-table-container {
+    display: flex;
+    justify-content: center;
+}
+
+th, td {
+    padding: 8px 16px;
+    text-align: left;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+#game-content{
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+}
+
+#game-details {
+    text-align: center;
+}
+#game-details-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 10px;
+}
+
+.after-game-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+}
+
+.report {
+    width: 100%; /* Take up the entire width of the parent container */
+    min-height: 120px; /* Set a minimum height */
+    text-align: left; /* Text starts on the left */
+    resize: none; /* Disable resizing */
+  }
+
+#after-game-container{
+    margin: 25px;
+}
+
+@media screen and (max-width: 700px) {
+    #game-content {
+        grid-template-columns: 1fr;
+    }
+    .after-game-grid{
+        grid-template-columns: 1fr;
+
+    }
 }

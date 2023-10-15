@@ -130,30 +130,14 @@ def gameinfo(request, companyid, gameid):
     employment = getemployment(request, companyid)
     try:
         game = Game.objects.get(id=gameid)
+        assignments = Assignment.objects.filter(game=game)
     except:
         return # not a valid game id
-    payload = {
-        "Game ID":game.assigned_game_id,
-        "Sport":game.sport.name,
-        "Age Group":game.age,
-        "Gender":game.gender,
-        "Field": None if game.field is None else f'{game.field.complex.name} - {game.field.name}',
-        "League":game.league,
-        "Home Team":game.home_team,
-        "Away Team":game.away_team,
-        "Date Time":game.date_time
-    }
-    
-    if game.happened():
-        payload['Home Score'] = (game.home_score)
-        payload['Away Score'] = (game.away_score)
-        payload['Game Report'] = (game.game_report)
 
-    for det in payload:
-        payload[det]= '--' if payload[det] is None else payload[det]
 
-    print(payload)
-    return render(request, "company/game.html", {"game": game, "payload": payload, 'employment':employment})
+    return render(request, "company/game.html", {"game": game,
+                                                 'employment':employment,
+                                                 'assignments': assignments})
 
 @login_required
 def mygames(request): # not done

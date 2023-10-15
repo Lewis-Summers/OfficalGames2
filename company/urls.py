@@ -5,7 +5,7 @@ urlpatterns = [
     path('<int:companyid>/home', views.home, name='dashboard'),
     
     #info
-    path('<int:companyid>/info/officials/official/<int:id>',  views.official, name='offical'),
+    path('<int:companyid>/info/officials/<int:id>',  views.official, name='offical'),
     path('<int:companyid>/info/leagues',  views.leagues, name='leagues'),
     path('<int:companyid>/info/leagues/<int:id>',  views.league, name='league'),
     path('<int:companyid>/info/complexs', views.complexs, name='complexs'),
