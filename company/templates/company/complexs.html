@@ -20,6 +20,7 @@
                             <th class='id'>Complex ID</th>
                             <th class='name'>Name</th>
                             <th class='addr'>Address</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id='tbody'>
@@ -50,14 +51,25 @@
             <td class='id'><a href="/company/{{employment.company.id}}/info/complexs/${complex.id}">${complex.id}</td>
             <td class='name'>${complex.name}</td>
             <td class='addr'>${complex.address}</td>
+            <td><button type="button" class="moreInfoButton">Expand Fields</button></td>
             `;
             tableBody.appendChild(row);
+
+            const fieldRow = document.createElement('tr');
+            fieldRow.innerHTML = `
+            <td colspan="4">
+                <table>
+                    <tbody>
+                        ${complex.feilds.map(feild => `<tr class='feildRow'><td class='feildtd'>${feild}</td></tr>`)}
+                    </tbody>
+                </table>
+            </td>
+            `;
+            fieldRow.className = 'hiddenFeilds'
+            tableBody.appendChild(fieldRow);
         });
+        moreInfoButtons()
     }
-
-    // Initial table population
-    // populateTable(data);
-
     // Event listener for the search input
     function checkvals() {
         const searchTerm = searchInput.value.toLowerCase();
@@ -68,8 +80,30 @@
         // Update the table with filtered data
         populateTable(filteredData);
     }
+    function moreInfoButtons(){
+        const moreInfoButtons = document.querySelectorAll('.moreInfoButton');
+        moreInfoButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const row = button.parentElement.parentElement; // Get the parent <tr> element
+                const expandedInfo = row.nextElementSibling;
+    
+                if (expandedInfo && expandedInfo.classList.contains('hiddenFeilds')) {
+                    if (expandedInfo.style.display === 'none' || expandedInfo.style.display === ''){
+                        expandedInfo.style.display = 'table-row';
+                        button.textContent = 'Hide Fields';
+                    }else{
+                        expandedInfo.style.display = 'none';
+                        button.textContent = 'Expand Fields';
+                    }
+                }
+            });
+        });
+    }
+
     populateTable(data);
     searchInput.addEventListener('input', checkvals);
+
+    
 });
 </script>
 {% endblock scripts %}

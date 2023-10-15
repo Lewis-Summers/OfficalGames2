@@ -2,6 +2,8 @@
 table {
     width: 100%;
     border-collapse: collapse;
+}
+.data-table{
     margin: 20px;
 }
 .data-table-container {
@@ -36,6 +38,15 @@ th, td {
     margin-bottom: 5px;
     border-radius: 5px;
 }
+
+.hiddenFeilds{
+    display: none;
+}
+
+.feildRow, .feildtd{
+    border-top: 1px solid #ddd;
+}
+
 
 /* Media query for screens smaller than a certain width (e.g., 768px) */
 @media (max-width: 768px) {

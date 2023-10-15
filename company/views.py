@@ -108,8 +108,10 @@ def complexs(request, companyid):
     # Convert the QuerySet to a list of dictionaries
     complexList = list(complexes)
     # chat gpt is so smart omg lmao
+    for index, complex in enumerate(complexList):
+        feilds = Field.objects.filter(complex__id=complex['id']).values('name')
+        complexList[index]['feilds'] = [feild['name'] for feild in feilds]
     print(complexList)
-    # for complex in complexList:
     #     complex['address'] = '--' if complex['address'] is None else complex['address']
     # IDK IF WE NEED THIS CODE IT IS FOR MAKING SURE THERE IS AND ADDR BUT I THINK IT IS GONNA BE REQUIRED TO HAVE AN ADDR FOR A COMPLEX
     return render(request, "company/complexs.html", {'employment':employment, 'complexsData': complexList})
