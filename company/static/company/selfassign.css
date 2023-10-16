@@ -101,6 +101,25 @@ th, td {
     margin-bottom: 10px;
 }
 
+.icon-text-container {
+    display: flex;
+    align-items: center;
+}
+
+.assignment-icon-container{
+    display: flex;
+    align-items: center;
+}
+
+.assignments-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.unaccepted-user-icon{
+    color: red;
+}
+
 @media screen and (max-width: 500px) {
     #search-criteria-container{
         grid-template-columns: 1fr;

@@ -78,13 +78,11 @@
         <div class="data-table-container"> 
             <table class="data-table">
                 <thead>
-                     <tr>
+                    <tr>
                         <th class='id'>Game ID</th>
                         <th class='league'>League</th>
                         <th class='complex'>Complex</th>
-                        <th class='field'>Field</th>
                         <th class='date'>Date </th>
-                        <th class='time'>Time</th>
                         <th class='refs'>Officals Assigned</th>
                     </tr>
                 </thead>
@@ -191,10 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
             row.innerHTML = `
             <td class='id'><a href="/company/{{employment.company.id}}/info/game/${game.id}">${game.gameid}</a></td>
             <td class='league'>${game.league.val}</td>
-            <td class='complex'>${game.complex.val}</td>
-            <td class='field'>${game.field.val}</td>
-            <td class='date'>${game.dateFormatted}</td>
-            <td class='time'>${game.time}</td>
+            <td class='complex'>${game.complex.val} - ${game.field.val}</td>
+            <td class='date'>${game.dateFormatted} - ${game.time}</td>
             <td class='refs'>
                 ${game.refs.map(ref => `${ref.role} - ${ref.name}`).join('<br>')}
             </td>
@@ -296,11 +292,11 @@ document.addEventListener('DOMContentLoaded', () => {
             (currentCriteria.field === undefined || game.field.id === currentCriteria.field)
           ){
             let gameDate = new Date(game.date)
+            // console.log(datesAreEqual(gameDate, startDate))
             if ((startDate === undefined || datesAreEqual(gameDate, startDate)) &&
                 (endDate === undefined || datesAreEqual(gameDate, endDate))) {
                 return game;
-            } else if ((startDate === undefined || gameDate >= startDate) &&
-                (endDate === undefined || gameDate <= endDate)) {
+            } else if ((gameDate >= startDate) && (gameDate <= endDate)) {
                 return game;
             }
           }

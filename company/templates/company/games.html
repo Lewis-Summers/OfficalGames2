@@ -69,7 +69,7 @@
 
     $(document).ready(function() {
         // Attach an event listener to the dropdown
-        $('#sport-dropdown').on('change', function() {
+        $('.request-button').on('click', function() {
             var selectedOption = $(this).val();
             // Make an AJAX request to fetch data
             $.ajax({

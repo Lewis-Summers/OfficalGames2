@@ -41,7 +41,7 @@
                 <select id="criteria-complex" name="complex">
                     <option hidden disabled selected value> Select a Complex </option>
                     {% for complex in complexCriteriaData %}
-                    <option value="{{complex.id}}">{{complex.name}}</option>
+                        <option value="{{complex.id}}">{{complex.name}}</option>
                     {% endfor %}
                     <option value> No Preference </option>
                 </select>
@@ -68,11 +68,10 @@
                      <tr>
                         <th class='id'>Game ID</th>
                         <th class='league'>League</th>
-                        <th class='complex'>Complex</th>
-                        <th class='field'>Field</th>
-                        <th class='date'>Date </th>
-                        <th class='time'>Time</th>
+                        <th class='complex'>Complex - Field</th>
+                        <th class='date'>Date and Time</th>
                         <th class='refs'>Officals Assigned</th>
+                        <th class='request'></th>
                     </tr>
                 </thead>
                 <tbody id='tbody'>
@@ -176,12 +175,19 @@ document.addEventListener('DOMContentLoaded', () => {
             row.innerHTML = `
             <td class='id'><a href="/company/{{companyid}}/info/game/${game.id}">${game.gameid}</a></td>
             <td class='league'>${game.league.val}</td>
-            <td class='complex'>${game.complex.val}</td>
-            <td class='field'>${game.field.val}</td>
-            <td class='date'>${game.dateFormatted}</td>
-            <td class='time'>${game.time}</td>
+            <td class='complex'>${game.complex.val} - ${game.field.val}</td>
+            <td class='date'>${game.dateFormatted} - ${game.time}</td>
             <td class='refs'>
-                ${game.refs.map(ref => `${ref.role} - ${ref.name}`).join('<br>')}
+                <div class='assignments-grid'>
+                    ${game.refs.map(ref => `
+                        <div class='assignment-icon-container'>
+                            <i class='bx bxs-user unaccepted-user-icon'></i> <p>${ref.name}</p>
+                        </div> 
+                        `)}
+                </div>
+            </td>
+            <td>
+                <button type="button" class='request-button' onclick='gameRequest(${game.id})'>Request</button>
             </td>
             `;
             tableBody.appendChild(row);
@@ -260,15 +266,10 @@ document.addEventListener('DOMContentLoaded', () => {
             (currentCriteria.field === undefined || game.field.id === currentCriteria.field)
           ){
             let gameDate = new Date(game.date)
-            game
-            console.log(gameDate)
-
-
             if ((startDate === undefined || datesAreEqual(gameDate, startDate)) &&
                 (endDate === undefined || datesAreEqual(gameDate, endDate))) {
                 return game
-            } else if ((startDate === undefined || gameDate >= startDate) &&
-                (endDate === undefined || gameDate <= endDate)) {
+            } else if ((gameDate >= startDate) && (gameDate <= endDate)) {
                 return game
             }
           }
@@ -304,6 +305,24 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         return string;
 
+    }
+
+    function gameRequest(id) {
+        // Make an AJAX request to fetch data
+        $.ajax({
+            type: 'POST',
+            url: '{% url "selfassign" companyid=employment.company.id %}',  
+            data: {
+                gameid: id
+            },
+            success: function(fetcheddata) {
+                data = fetcheddata;
+                console.log(data);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
     }
     filterGamesByCriteria();
     // this is commented out because I want it to be not show games until a sport is selected

@@ -169,7 +169,7 @@ def selfassign(request, companyid):
     # returns information about open games and lets a user submit a request
     # FORM
     if request.method == 'POST':
-        pass
+        return JsonResponse('response_data') 
 
     return getAllGameInfo(request, companyid, 'company/selfassign.html')
 
