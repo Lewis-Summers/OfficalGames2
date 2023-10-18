@@ -32,6 +32,7 @@ def getAllGameInfo(request, companyid, outputDoc):
             "date": game.date_time.strftime('%Y-%m-%d') if game.date_time else '--',
             "dateFormatted":game.date_time.strftime('%B %d(%a) %Y') if game.date_time else '--',
             "time": game.date_time.strftime('%I:%M %p') if game.date_time else '--',
+            "week": game.date_time.strftime('%W'),
             "refs": [{
                 'name': ref.user.get_full_name(),
                 'role': ref.role.name
