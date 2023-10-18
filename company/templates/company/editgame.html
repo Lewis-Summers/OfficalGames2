@@ -153,6 +153,8 @@
         const feildSelect = document.getElementById('feild-input');
         const sportsData = {{sportsData | safe }}
         const complexData = {{complexData | safe }}
+        console.log(sportsData);
+        console.log(complexData);
 
         function updateGameIdHeader() {
             var gameNumber = document.getElementById("game-number").value;
@@ -160,16 +162,19 @@
             gameIdHeader.textContent = gameNumber;
         }
 
-        function updateHighLevelData(data) {
+        function updateHighLevelData() {
+            console.log(sportsData.leagues);
+            console.log(sportsData.league);
+            console.log(sportsData.leagues);
             let leagueSelectString = `<option value="" selected disabled>Pick A League</option>`;
-            data.leagues.forEach(function(league) {
+            sportsData.leagues.forEach(function(league) {
                 leagueSelectString = leagueSelectString.concat(
                     `<option value="${league.id}">${league.name}</option>`
                 );
             });
             leagueSelect.innerHTML = leagueSelectString;
             let complexSelectString = `<option value="None" selected disabled>Pick A Complex</option>`;
-            data.complexs.forEach(function(complex) {
+            complexData.complexs.forEach(function(complex) {
                 complexSelectString = complexSelectString.concat(
                     `<option value="${complex.id}">${complex.name}</option>`
                 );
@@ -190,8 +195,7 @@
             ateamSelect.innerHTML = teamSelectString;
         });
 
-        sportSelect.addEventListener('change', updateHighLevelData);
-        league
+        sportSelect.addEventListener('change', updateHighLevelData());
     })
 </script>
 {% endblock scripts %}
