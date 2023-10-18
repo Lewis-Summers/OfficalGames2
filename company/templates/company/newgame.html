@@ -6,7 +6,7 @@
 {% endblock style %}
 {% block main %}
 <div id="edit-header">
-    <h1>Edit Game <span id="game-id-header">324</span></h1>
+    <h1>New Game <span id="game-id-header"></span></h1>
 </div>
 <form method="post">
     <div id="game-content">
@@ -14,7 +14,7 @@
             <div id="game-details">
                 <div id="game-details-grid">
                     <label for="sport">Sport: </label>
-                    <select id="sport-input" name="league">
+                    <select id="sport-select" name="league">
                         <option disabled selected>Pick your sport</option>
                         {% for sport in sports %}
                         <option value="{{sport.id}}">{{sport.name}}</option>
@@ -22,48 +22,48 @@
                     </select>
 
                     <label for="league">League: </label>
-                    <select id="league-input" name="league">
+                    <select id="league" name="league">
 
                     </select>
 
                     <label for="hteam">Home Team: </label>
-                    <input id="hteam-input" name="hteam" list="hteam-datalist">
+                    <input id="hteam" name="hteam" list="hteam-datalist">
                     <datalist id="hteam-datalist">
 
                     </datalist>
 
                     <label for="ateam">Away Team: </label>
-                    <input id="ateam-input" name="ateam" list="ateam-datalist">
+                    <input id="ateam" name="ateam" list="ateam-datalist">
                     <datalist id="ateam-datalist">
                         <option value="Team 1">
                         <option value="Team 2">
                     </datalist>
 
                     <label for="game-number">Game Number: </label>
-                    <input oninput="updateGameIdHeader()" type="text" id="game-number-input" name="game-number" value="324"
+                    <input oninput="updateGameIdHeader()" type="text" id="game-number" name="game-number" value="324"
                         contenteditable="true">
 
                     <label for="age-group">Age Group: </label>
-                    <select id="age-group-input" name="age-group">
+                    <select id="age-group" name="age-group">
                         <option value="U12">U12</option>
                         <option value="U14">U14</option>
                     </select>
 
                     <label for="gender">Gender: </label>
-                    <select id="gender-input" name="gender">
+                    <select id="gender" name="gender">
                         <option value="C">Coed</option>
                         <option value="M">Male</option>
                         <option value="F">Female</option>
                     </select>
 
                     <label for="complex">Complex: </label>
-                    <select id="complex-input" name="complex">
+                    <select id="complex" name="complex">
                         <option value="1">Complex 1</option>
                         <option value="2">Complex 2</option>
                         <option value="3">Complex 3</option>
                     </select>
                     <label for="feild">Feild: </label>
-                    <select id="feild-input" name="feild">
+                    <select id="feild" name="feild">
                         <option value="1">Feild 1</option>
                         <option value="2">Feild 2</option>
                         <option value="3">Feild 3</option>
@@ -143,55 +143,73 @@
 {% block scripts %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sportSelect = document.getElementById('sport-input')
-        const leagueSelect = document.getElementById('league-input');
-        const hteamSelect = document.getElementById('hteam-input');
-        const ateamSelect = document.getElementById('ateam-input');
-        const ageSelect = document.getElementById('age-group-input');
-        const complexSelect = document.getElementById('complex-input');
-        const feildSelect = document.getElementById('feild-input');
-        const sportsData = {{sportsData | safe }}
-        const complexData = {{complexData | safe }}
+    const leagueSelect = document.getElementById('league');
+    const hteamSelect = document.getElementById('hteam');
+    const ateamSelect = document.getElementById('ateam');
+    const ageSelect = document.getElementById('age-group');
+    const complexSelect = document.getElementById('complex');
+    const feildSelect = document.getElementById('feild');
+    let data;
 
-        function updateGameIdHeader() {
-            var gameNumber = document.getElementById("game-number").value;
-            var gameIdHeader = document.getElementById("game-id-header");
-            gameIdHeader.textContent = gameNumber;
-        }
+    function updateGameIdHeader() {
+        var gameNumber = document.getElementById("game-number").value;
+        var gameIdHeader = document.getElementById("game-id-header");
+        gameIdHeader.textContent = gameNumber;
+    }
 
-        function updateHighLevelData(data) {
-            let leagueSelectString = `<option value="" selected disabled>Pick A League</option>`;
-            data.leagues.forEach(function(league) {
-                leagueSelectString = leagueSelectString.concat(
-                    `<option value="${league.id}">${league.name}</option>`
-                );
-            });
-            leagueSelect.innerHTML = leagueSelectString;
-            let complexSelectString = `<option value="None" selected disabled>Pick A Complex</option>`;
-            data.complexs.forEach(function(complex) {
-                complexSelectString = complexSelectString.concat(
-                    `<option value="${complex.id}">${complex.name}</option>`
-                );
-            });
-            complexSelect.innerHTML = complexSelectString;
-        }
-
-        // OKAY SO THIS IS WHERE I LEFT OFF WE NEED TO MAKE FUNCTIONS TO FILL IN DATA BASED OF OTHER DATA GOING IN LIKE TEAMS UPDAT FOR LEAGUES AND SHIT
-        leagueSelect.addEventListener('change', function() {
-            const league = data.leagues.find(league => league.id === leagueId);
-            let teamSelectString = ``
-            league.teams.forEach(function(team) {
-                teamSelectString = teamSelectString.concat(
-                    `<option value="${team.id}">${team.name}</option>`
-                );
-            });
-            hteamSelect.innerHTML = teamSelectString;
-            ateamSelect.innerHTML = teamSelectString;
+    function updateHighLevelData(data) {
+        let leagueSelectString = `<option value="" selected disabled>Pick A League</option>`;
+        data.leagues.forEach(function(league) {
+            leagueSelectString = leagueSelectString.concat(
+                `<option value="${league.id}">${league.name}</option>`
+            );
         });
-
-        sportSelect.addEventListener('change', updateHighLevelData);
-        league
-    })
+        leagueSelect.innerHTML = leagueSelectString;
+        let complexSelectString = `<option value="None" selected disabled>Pick A Complex</option>`;
+        data.complexs.forEach(function(complex) {
+            complexSelectString = complexSelectString.concat(
+                `<option value="${complex.id}">${complex.name}</option>`
+            );
+        });
+        complexSelect.innerHTML = complexSelectString;
+    }
+    $(document).ready(function() {
+        // Attach an event listener to the dropdown
+        $('#sport-select').on('change', function() { // Add parentheses () here
+            var selectedOption = $(this).val();
+            // Make an AJAX request to fetch data
+            $.ajax({
+                type: 'GET',
+                url: '/company/fetch/editgame', // URL of your Django view
+                data: {
+                    id: selectedOption,
+                    companyid: {
+                        {
+                            companyid
+                        }
+                    }
+                },
+                success: function(fetcheddata) {
+                    console.log(fetcheddata);
+                    updateHighLevelData(fetcheddata);
+                    data = fetcheddata;
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+    leagueSelect.addEventListener('change', function() {
+        const league = data.leagues.find(league => league.id === leagueId);
+        let teamSelectString = ``
+        league.teams.forEach(function(team) {
+            teamSelectString = teamSelectString.concat(
+                `<option value="${team.id}">${team.name}</option>`
+            );
+        });
+        hteamSelect.innerHTML = teamSelectString;
+        ateamSelect.innerHTML = teamSelectString;
+    });
 </script>
 {% endblock scripts %}

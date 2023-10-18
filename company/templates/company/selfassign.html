@@ -166,11 +166,42 @@ document.addEventListener('DOMContentLoaded', () => {
             fieldSelect.innerHTML += '<option value="">No Preference</option>';
         }
     }
+    function addTableHeadings(weekNum){
+        const weekrow = document.createElement("tr")
+        const weekHead = document.createElement("th");
+        weekHead.setAttribute("colspan", "5");
+        weekHead.textContent = `Week #${weekNum} (10/15/23 - 10/22/23)`;
+        weekrow.appendChild(weekHead);
+        tableBody.appendChild(weekrow);
+
+        const headerInfo = {
+            "Game ID": "id",
+            "League": "league",
+            "Complex": "complex",
+            "Date": "date",
+            "Officials Assigned": "refs"
+        };
+        const headerRow = document.createElement("tr");
+        for (var text in headerInfo) {
+            const className = headerInfo[text]; // Get the class name from the dictionary
+            const headerHead = document.createElement("th");
+            headerHead.textContent = text;
+            headerHead.className = className; // Set the class attribute
+            headerRow.appendChild(headerHead); // Append the <th> element to the <tr> element
+        }
+        tableBody.appendChild(headerRow);
+    }
+
     function populateTable(data) {
         tableBody.innerHTML = ''; // Clear existing rows
         cardBody.innerHTML = '';
         cardBodyHTML = cardBody.innerHTML;
+        let week = undefined;
         data.forEach(game => {
+            if (week!=game.week){
+                week = game.week;
+                addTableHeadings(week);
+            }
             const row = document.createElement('tr');
             row.innerHTML = `
             <td class='id'><a href="/company/{{companyid}}/info/game/${game.id}">${game.gameid}</a></td>

@@ -33,6 +33,8 @@ urlpatterns = [
     path('<int:companyid>/admin/announcements', views.home, name='announcements'),
     path('<int:companyid>/admin/settings', views.home, name='settings'),
     path('<int:companyid>/admin/dashboard', views.home, name='admin dashboard'),
+    path('<int:companyid>/admin/dashboard', views.home, name='admin dashboard'),
+    path('<int:companyid>/admin/new/game', views.newGame, name='admin dashboard'),
 
 
 
